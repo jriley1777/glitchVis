@@ -1,3 +1,3 @@
-source : "https://www.rubygems.org"
+source :rubygems
 gem "sinatra"
 gem "thin"
