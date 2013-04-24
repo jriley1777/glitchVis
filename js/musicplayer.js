@@ -2,7 +2,7 @@ $(document).ready(function(){
   $("#jquery_jplayer_1").jPlayer({
     ready: function () {
       $(this).jPlayer("setMedia", {
-      mp3:"../../glitchVis/assets/music/smooth.mp3"
+      mp3:"../../assets/music/smooth.mp3"
     });
   },
       swfPath: "js",
