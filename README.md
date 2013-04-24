@@ -1,4 +1,1 @@
-glitchVis
-=========
-
-heroku deployed visual project
+http://powerful-meadow-8588.herokuapp.com/
