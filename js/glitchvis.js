@@ -19,8 +19,8 @@ var svg = d3.select("#chart").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey()
-    .nodeWidth(30)
-    .nodePadding(10)
+    .nodeWidth(70)
+    .nodePadding(13)
     .size([width, height]);
 
 var path = sankey.link();
@@ -54,21 +54,23 @@ d3.json("data/clusterdata.json", function(error, graph) {
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { 
-      return "translate(" + d.x + "," + d.y + ")"; })
-    .call(d3.behavior.drag()
-      .origin(function(d) { return d; })
-      .on("dragstart", function() { 
+      return "translate(" + d.x + "," + d.y + ")"; });
+    //.call(d3.behavior.drag()
+      //.origin(function(d) { return d; })
+      /*.on("dragstart", function() { 
       this.parentNode.appendChild(this); })
       .on("drag", dragmove));
-
+*/  
 // add the rectangles for the nodes
   node.append("rect")
       .attr("height", function(d) { return d.dy; })
       .attr("width", sankey.nodeWidth())
       .style("fill", function(d) { 
       return d.color = color(d.name.replace(/ .*/, "")); })
-      .style("stroke", function(d) { 
+      .style("stroke",function(d) { 
       return d3.rgb(d.color).darker(2); })
+      .on("mouseover", onmouseover)
+      .on("mouseout", onmouseout)
     .append("title")
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
@@ -95,3 +97,16 @@ d3.json("data/clusterdata.json", function(error, graph) {
     link.attr("d", path);
   }
 });
+
+  function onmouseover(d) {
+    d3.selectAll(".link")
+      .style("stroke-opacity",function(i){
+        console.log(i);
+        if (i.source.node == d.node || i.target.node == d.node) return 0.5;
+      });
+  };
+
+  function onmouseout(d) {
+        d3.selectAll(".link")
+          .style("stroke-opacity", 0.1);
+      };
