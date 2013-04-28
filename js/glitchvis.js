@@ -127,6 +127,7 @@ function particle(d){
       .attr("height", Math.random()*400)
       .transition()
       .delay(500)
-      .duration(2000)
+      .duration(5000)
+      .ease("elastic")
       .remove();
     }
