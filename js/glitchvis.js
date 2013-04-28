@@ -101,7 +101,6 @@ d3.json("data/clusterdata.json", function(error, graph) {
   function onmouseover(d) {
     d3.selectAll(".link")
       .style("stroke-opacity",function(i){
-        console.log(i);
         if (i.source.node == d.node || i.target.node == d.node) return 0.5;
       });
   };
@@ -110,3 +109,20 @@ d3.json("data/clusterdata.json", function(error, graph) {
         d3.selectAll(".link")
           .style("stroke-opacity", 0.1);
       };
+
+crab = d3.select("#crabland")
+         .append("svg")
+          .attr("width", 1600)
+          .attr("height", 800)
+          .style("pointer-events", "all")
+          .on("mousemove", particle);
+
+function particle(d){
+    var m = d3.mouse(this)
+    crab.append("image")
+      .attr("xlink:href","assets/graphics/musiccrab2.gif")
+      .attr("x", m[0])
+      .attr("y", m[1])
+      .attr("width", Math.random()*400)
+      .attr("height", Math.random()*400);
+    }
