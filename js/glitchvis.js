@@ -126,8 +126,10 @@ function particle(d){
       .attr("width", Math.random()*700)
       .attr("height", Math.random()*700)
       .transition()
+      .ease("elastic")
+      .attr("x", m[0]+(Math.random()*2-1)*400)
+      .attr("y", m[1]+(Math.random()*2-1)*400)
       .delay(500)
       .duration(15000)
-      .ease("elastic")
       .remove();
     }
