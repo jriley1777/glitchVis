@@ -124,5 +124,9 @@ function particle(d){
       .attr("x", m[0])
       .attr("y", m[1])
       .attr("width", Math.random()*400)
-      .attr("height", Math.random()*400);
+      .attr("height", Math.random()*400)
+      .transition()
+      .delay(500)
+      .duration(2000)
+      .remove();
     }
