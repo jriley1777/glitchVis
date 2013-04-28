@@ -120,7 +120,7 @@ crab = d3.select("#crabland")
 function particle(d){
     var m = d3.mouse(this)
     crab.append("image")
-      .attr("xlink:href","assets/graphics/musiccrab2.gif")
+      .attr("xlink:href","assets/graphics/happycrab2.gif")
       .attr("x", m[0])
       .attr("y", m[1])
       .attr("width", Math.random()*700)
