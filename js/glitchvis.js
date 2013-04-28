@@ -123,11 +123,11 @@ function particle(d){
       .attr("xlink:href","assets/graphics/musiccrab2.gif")
       .attr("x", m[0])
       .attr("y", m[1])
-      .attr("width", Math.random()*400)
-      .attr("height", Math.random()*400)
+      .attr("width", Math.random()*700)
+      .attr("height", Math.random()*700)
       .transition()
       .delay(500)
-      .duration(5000)
+      .duration(15000)
       .ease("elastic")
       .remove();
     }
