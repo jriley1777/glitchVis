@@ -103,7 +103,7 @@ d3.json("data/clusterdata.json", function(error, graph) {
   function onmouseout(d) {
   };
 
-/*crab = d3.select("#crabland")
+crab = d3.select("#crabland")
          .append("svg")
           .attr("width", 1600)
           .attr("height", 800)
@@ -125,7 +125,7 @@ function particle(d){
       .delay(500)
       .duration(15000)
       .remove();
-    }*/
+    }
 
 
 function onclick(d){
