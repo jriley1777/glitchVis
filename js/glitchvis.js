@@ -19,8 +19,8 @@ var svg = d3.select("#chart").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey()
-    .nodeWidth(70)
-    .nodePadding(13)
+    .nodeWidth(10)
+    .nodePadding(0)
     .size([width, height]);
 
 var path = sankey.link();
@@ -69,8 +69,7 @@ d3.json("data/clusterdata.json", function(error, graph) {
       return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke",function(d) { 
       return d3.rgb(d.color).darker(2); })
-      .on("mouseover", onmouseover)
-      .on("mouseout", onmouseout)
+      .on("click", onclick)
     .append("title")
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
@@ -99,18 +98,12 @@ d3.json("data/clusterdata.json", function(error, graph) {
 });
 
   function onmouseover(d) {
-    d3.selectAll(".link")
-      .style("stroke-opacity",function(i){
-        if (i.source.node == d.node || i.target.node == d.node) return 0.5;
-      });
   };
 
   function onmouseout(d) {
-        d3.selectAll(".link")
-          .style("stroke-opacity", 0.1);
-      };
+  };
 
-crab = d3.select("#crabland")
+/*crab = d3.select("#crabland")
          .append("svg")
           .attr("width", 1600)
           .attr("height", 800)
@@ -132,4 +125,12 @@ function particle(d){
       .delay(500)
       .duration(15000)
       .remove();
-    }
+    }*/
+
+
+function onclick(d){
+  d3.selectAll(".link")
+      .style("stroke-opacity",function(i){
+        if (i.source.node == d.node || i.target.node == d.node) return 0.5;
+      });
+};
