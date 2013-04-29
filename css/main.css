@@ -16,6 +16,7 @@
 
 .link:hover {
 	stroke-opacity: .5;
+	stroke: red;
 	}
 h1 {
 	font-size: 236px;

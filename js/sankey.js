@@ -51,7 +51,7 @@ d3.sankey = function() {
   };
 
   sankey.link = function() {
-    var curvature = .3;
+    var curvature = .4;
 
     function link(d) {
       var x0 = d.source.x + d.source.dx,
@@ -281,7 +281,7 @@ d3.sankey = function() {
   }
 
   function center(node) {
-    return node.y + node.dy / 2;
+    return -(node.y + node.dy);
   }
 
   function value(link) {
