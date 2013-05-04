@@ -1,13 +1,15 @@
   
 var units = "People";
 
+//svg canvas variables
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 1000 - margin.left - margin.right,
     height = 480 - margin.top - margin.bottom;
 
+
 var formatNumber = d3.format(",.0f"),    // zero decimal places
     format = function(d) { return formatNumber(d) + " " + units; },
-    color = d3.scale.category20();
+    color = d3.scale.category20b();//CHANGE
 
 // append the svg canvas to the page
 var svg = d3.select("#chart").append("svg")
@@ -28,10 +30,9 @@ var path = sankey.link();
 // load the data
 d3.json("data/clusterdata.json", function(error, graph) {
 
-  sankey
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .layout(32);
+sankey.nodes(graph.nodes)
+  .links(graph.links)
+  .layout(32);
 
 // add in the links
   var link = svg.append("g").selectAll(".link")
@@ -63,12 +64,12 @@ d3.json("data/clusterdata.json", function(error, graph) {
 */  
 // add the rectangles for the nodes
   node.append("rect")
-      .attr("height", function(d) { return d.dy; })
+      .attr("height", function(d) {return d.dy; })
       .attr("width", sankey.nodeWidth())
       .style("fill", function(d) { 
-      return d.color = color(d.name.replace(/ .*/, "")); })
+        return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke",function(d) { 
-      return d3.rgb(d.color).darker(2); })
+        return d3.rgb(d.color).darker(2); })//box
       .on("click", onclick)
     .append("title")
       .text(function(d) { 
@@ -81,21 +82,22 @@ d3.json("data/clusterdata.json", function(error, graph) {
       .attr("dy", ".35em")
       .attr("text-anchor", "end")
       .attr("transform", null)
-      .text(function(d) { return d.name; })
-    .filter(function(d) { return d.x < width / 2; })
+      .text(function(d) { return d.name.replace(/-.*/, ""); })
+      //.style("font-size", 5)
+    .filter(function(d) { return d.x < width / 2; })//positioning left or right of node
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
 
-// the function for moving the nodes
-  function dragmove(d) {
-    d3.select(this).attr("transform", 
-        "translate(" + d.x + "," + (
-                d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
-            ) + ")");
-    sankey.relayout();
-    link.attr("d", path);
-  }
-});
+  // // the function for moving the nodes
+  //   function dragmove(d) {
+  //     d3.select(this).attr("transform", 
+  //         "translate(" + d.x + "," + (
+  //                 d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+  //             ) + ")");
+  //     sankey.relayout();
+  //     link.attr("d", path);
+  //   }
+  // });
 
   function onmouseover(d) {
   };
@@ -130,7 +132,15 @@ function particle(d){
 
 function onclick(d){
   d3.selectAll(".link")
-      .style("stroke-opacity",function(i){
-        if (i.source.node == d.node || i.target.node == d.node) return 0.5;
+      .attr("id", function(i){
+        var status = "unclicked";
+        if (i.source.node == d.node || i.target.node == d.node){
+          console.log(i);
+            if (status=="unclicked"){
+              status="clicked";}
+            else {status="unclicked";}
+        }
+        return status;
       });
-};
+    }
+});
