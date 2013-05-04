@@ -73,7 +73,8 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
       .attr("width", sankey.nodeWidth())
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
       .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
-      .on("click", onclick)
+      .on("mouseover", nodemouseover)
+      .on("mouseout", nodemouseout)
     .append("title")
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
@@ -144,19 +145,24 @@ function particle(d){
       .remove();
     }
 
-
-function onclick(d){
+var status=null;
+function nodemouseover(d){
   d3.selectAll(".link")
       .attr("id", function(i){
-        var status = "unclicked";
         if (i.source.node == d.node || i.target.node == d.node){
-          console.log(i);
-            if (status=="unclicked"){
-              status="clicked";}
-            else {status="unclicked";}
+          status="clicked";
+          console.log(status);
+        } else {
+          status=null;
         }
         return status;
-      });
+        console.log(i.source.node,status);
+    });
+    }
+
+function nodemouseout(d){
+  d3.selectAll(".link")
+      .attr("id", "unclicked");
     }
 
 //select all of our links and set a new stroke color on the conditioan that the value is =.01. 
