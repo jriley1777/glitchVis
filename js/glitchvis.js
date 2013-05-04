@@ -120,30 +120,30 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
   function onmouseout(d) {
   };
 
-crab = d3.select("#crabland")
-         .append("svg")
-          .attr("width", 1600)
-          .attr("height", 800)
-          .style("pointer-events", "all")
-          .on("mousemove", particle);
+// crab = d3.select("#crabland")
+//          .append("svg")
+//           .attr("width", 1600)
+//           .attr("height", 800)
+//           .style("pointer-events", "all")
+//           .on("mousemove", particle);
 
-function particle(d){
-    var m = d3.mouse(this) // this = whatever you are are selecting "this", you are controlling this by only calling the function on links (not nodes)
-      console.log(m);
-      crab.append("image")
-      .attr("xlink:href","assets/graphics/happycrab2.gif")
-      .attr("x", m[0])
-      .attr("y", m[1])
-      .attr("width", Math.random()*700)
-      .attr("height", Math.random()*700)
-      .transition()
-      .ease("elastic")
-      .attr("x", m[0]+(Math.random()*2-1)*400)
-      .attr("y", m[1]+(Math.random()*2-1)*400)
-      .delay(500)
-      .duration(15000)
-      .remove();
-    }
+// function particle(d){
+//     var m = d3.mouse(this) // this = whatever you are are selecting "this", you are controlling this by only calling the function on links (not nodes)
+//       console.log(m);
+//       crab.append("image")
+//       .attr("xlink:href","assets/graphics/happycrab2.gif")
+//       .attr("x", m[0])
+//       .attr("y", m[1])
+//       .attr("width", Math.random()*700)
+//       .attr("height", Math.random()*700)
+//       .transition()
+//       .ease("elastic")
+//       .attr("x", m[0]+(Math.random()*2-1)*400)
+//       .attr("y", m[1]+(Math.random()*2-1)*400)
+//       .delay(500)
+//       .duration(15000)
+//       .remove();
+//     }
 
 var status=null;
 function nodemouseover(d){
