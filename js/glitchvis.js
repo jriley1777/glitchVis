@@ -1,8 +1,8 @@
-  
+
 var units = "People";
 
-//svg canvas variables
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
+//this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
+var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
     width = 1000 - margin.left - margin.right,
     height = 480 - margin.top - margin.bottom;
 
@@ -11,65 +11,68 @@ var formatNumber = d3.format(",.0f"),    // zero decimal places
     format = function(d) { return formatNumber(d) + " " + units; },
     color = d3.scale.category20b();//CHANGE
 
+
 // append the svg canvas to the page
-var svg = d3.select("#chart").append("svg")
+var svg = d3.select("#chart").append("svg") //will select the id of cahrt from index.html ln:135 --> # looks for the id= from html
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g") //group everything on the vancas together.  will edit down on ln38 below
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
 
 // Set the sankey diagram properties
-var sankey = d3.sankey()
+var sankey = d3.sankey() //calling the function
     .nodeWidth(10)
     .nodePadding(0)
     .size([width, height]);
 
-var path = sankey.link();
+var path = sankey.link(); //sankey.link() is something happening in sankey.js 
 
 // load the data
-d3.json("data/clusterdata.json", function(error, graph) {
+d3.json("data/clusterdata.json", function(error, graph) { //this is in the data folder
 
-sankey.nodes(graph.nodes)
-  .links(graph.links)
-  .layout(32);
+  sankey.nodes(graph.nodes)
+    .links(graph.links)
+    .layout(32);
 
 // add in the links
   var link = svg.append("g").selectAll(".link")
       .data(graph.links)
     .enter().append("path")
       .attr("class", "link")
-      .attr("d", path)
-      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
-      .sort(function(a, b) { return b.dy - a.dy; });
+      .attr("d", path) //d??? look it up later 
+      // .style("stroke",function(d){
+      //   if(i.source.node == 8 && i.target.node == 14){
+      //   return "transparent";
+      // }})
+      .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
+      .sort(function(a, b) { return b.dy - a.dy; });  
 
 // add the link titles
-  link.append("title")
-        .text(function(d) {
-        return d.source.name + " → " + 
+  link.append("svg:title") //this is the mouseover stuff title is an svg element you can use "svg:title" or just "title"
+         .text(function(d) {
+        return d.source.name + " --> " + 
                 d.target.name + "\n" + format(d.value); });
 
-// add in the nodes
-  var node = svg.append("g").selectAll(".node")
+// add in the nodes (creating the groups of the rectanlges)
+  var node = svg.append("g").selectAll(".node") 
       .data(graph.nodes)
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { 
       return "translate(" + d.x + "," + d.y + ")"; });
-    //.call(d3.behavior.drag()
+    //.call(d3.behavior.drag()   <---------- THIS IS THE DRAG THING TO REMOVE!!
       //.origin(function(d) { return d; })
-      /*.on("dragstart", function() { 
-      this.parentNode.appendChild(this); })
+      /*.on("dragstart", function() {  <-------- THIS IS MOUSEOVER DRAG CAPABILITIES .on(mousemove) called pointer events, look it up!
+      this.parentNode.appendChild(this); }) 
       .on("drag", dragmove));
 */  
 // add the rectangles for the nodes
   node.append("rect")
-      .attr("height", function(d) {return d.dy; })
+      .attr("height", function(d) {return d.dy; }) 
       .attr("width", sankey.nodeWidth())
-      .style("fill", function(d) { 
-        return d.color = color(d.name.replace(/ .*/, "")); })
-      .style("stroke",function(d) { 
-        return d3.rgb(d.color).darker(2); })//box
+      .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
+      .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
       .on("click", onclick)
     .append("title")
       .text(function(d) { 
@@ -99,6 +102,17 @@ sankey.nodes(graph.nodes)
   //   }
   // });
 
+// the function for moving the nodes (defining the function)
+//   function dragmove(d) {
+//     d3.select(this).attr("transform", 
+//         "translate(" + d.x + "," + (
+//                 d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+//             ) + ")");
+//     sankey.relayout();
+//     link.attr("d", path);
+//   }
+// });
+
   function onmouseover(d) {
   };
 
@@ -113,8 +127,9 @@ crab = d3.select("#crabland")
           .on("mousemove", particle);
 
 function particle(d){
-    var m = d3.mouse(this)
-    crab.append("image")
+    var m = d3.mouse(this) // this = whatever you are are selecting "this", you are controlling this by only calling the function on links (not nodes)
+      console.log(m);
+      crab.append("image")
       .attr("xlink:href","assets/graphics/happycrab2.gif")
       .attr("x", m[0])
       .attr("y", m[1])
@@ -143,4 +158,13 @@ function onclick(d){
         return status;
       });
     }
+
+//select all of our links and set a new stroke color on the conditioan that the value is =.01. 
+d3.selectAll(".link")
+      .style("stroke-opacity", function(d){ 
+              console.log(d);
+              if(d.value == 0.01) return 0;
+              });
+
+
 });
