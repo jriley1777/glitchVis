@@ -1,3 +1,4 @@
+//do not play around with this! creating the sankey framework. we can then come back and style this elsewhere!
 d3.sankey = function() {
   var sankey = {},
       nodeWidth = 24,
