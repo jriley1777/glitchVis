@@ -60,8 +60,8 @@ d3.sankey = function() {
           xi = d3.interpolateNumber(x0, x1),
           x2 = xi(curvature),
           x3 = xi(1 - curvature),
-          y0 = d.source.y + d.sy + d.dy / 2,
-          y1 = d.target.y + d.ty + d.dy / 2;
+          y0 = d.source.y + d.sy + d.dy/2,
+          y1 = d.target.y + d.ty + d.dy/2;
       return "M" + x0 + "," + y0
            + "C" + x2 + "," + y0
            + " " + x3 + "," + y1
@@ -164,9 +164,9 @@ d3.sankey = function() {
     initializeNodeDepth();
     resolveCollisions();
     for (var alpha = 1; iterations > 0; --iterations) {
-      relaxRightToLeft(alpha *= .99);
+      relaxRightToLeft(alpha *= .45);
       resolveCollisions();
-      relaxLeftToRight(alpha);
+      relaxLeftToRight(0);
       resolveCollisions();
     }
 
@@ -207,7 +207,7 @@ d3.sankey = function() {
         nodes.forEach(function(node) {
           if (node.sourceLinks.length) {
             var y = d3.sum(node.sourceLinks, weightedTarget) / d3.sum(node.sourceLinks, value);
-            node.y += (y - center(node)) * alpha;
+            node.y += (y - center(node)) * alpha;///////////
           }
         });
       });

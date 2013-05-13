@@ -23,7 +23,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
     .nodeWidth(10)
-    .nodePadding(0)
+    .nodePadding(20)
     .size([width, height]);
 
 var path = sankey.link(); //sankey.link() is something happening in sankey.js 
@@ -60,16 +60,17 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { 
-      return "translate(" + d.x + "," + d.y + ")"; });
+          return "translate(" + d.x + "," + d.y + ")";
+      });
     //.call(d3.behavior.drag()   <---------- THIS IS THE DRAG THING TO REMOVE!!
       //.origin(function(d) { return d; })
-      /*.on("dragstart", function() {  <-------- THIS IS MOUSEOVER DRAG CAPABILITIES .on(mousemove) called pointer events, look it up!
-      this.parentNode.appendChild(this); }) 
-      .on("drag", dragmove));
-*/  
+      // .on("dragstart", function() {  //<-------- THIS IS MOUSEOVER DRAG CAPABILITIES .on(mousemove) called pointer events, look it up!
+      // this.parentNode.appendChild(this); }) 
+      // .on("drag", dragmove);
+  
 // add the rectangles for the nodes
   node.append("rect")
-      .attr("height", function(d) {return d.dy; }) 
+      .attr("height", function(d) {return d.dy; })
       .attr("width", sankey.nodeWidth())
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
       .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
@@ -96,23 +97,11 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
   //   function dragmove(d) {
   //     d3.select(this).attr("transform", 
   //         "translate(" + d.x + "," + (
-  //                 d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+  //                 d.y = Math.max(0, Math.min(height/2 - d.dy, d3.event.y))
   //             ) + ")");
   //     sankey.relayout();
   //     link.attr("d", path);
   //   }
-  // });
-
-// the function for moving the nodes (defining the function)
-//   function dragmove(d) {
-//     d3.select(this).attr("transform", 
-//         "translate(" + d.x + "," + (
-//                 d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
-//             ) + ")");
-//     sankey.relayout();
-//     link.attr("d", path);
-//   }
-// });
 
   function onmouseover(d) {
   };
