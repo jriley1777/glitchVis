@@ -1,8 +1,8 @@
 //do not play around with this! creating the sankey framework. we can then come back and style this elsewhere!
 d3.sankey = function() {
   var sankey = {},
-      nodeWidth = 24,
-      nodePadding = 8,
+      nodeWidth = 50,
+      nodePadding = 1,
       size = [1, 1],
       nodes = [],
       links = [];
@@ -163,10 +163,10 @@ d3.sankey = function() {
     //
     initializeNodeDepth();
     resolveCollisions();
-    for (var alpha = 1; iterations > 0; --iterations) {
-      relaxRightToLeft(alpha *= .45);
+    for (var alpha = 0; iterations > 0; --iterations) {
+      relaxRightToLeft(.401001);
       resolveCollisions();
-      relaxLeftToRight(0);
+      relaxLeftToRight(.101111);
       resolveCollisions();
     }
 
@@ -282,7 +282,7 @@ d3.sankey = function() {
   }
 
   function center(node) {
-    return -(node.y + node.dy);
+    return +(node.y + node.dy);
   }
 
   function value(link) {

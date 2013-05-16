@@ -20,6 +20,10 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
 
+var svg2 = d3.select("#bar1").append("svg")
+    .attr("width", 450)
+    .attr("height", 200);
+
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
     .nodeWidth(10)
@@ -102,6 +106,18 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
   //     sankey.relayout();
   //     link.attr("d", path);
   //   }
+
+  //CREATING A BARCHART
+  svg2.selectAll("rect")
+      .data(graph.links)
+      .enter().append("rect")
+      .attr("width",10)
+      .attr("height",function(d){return d.value})
+      .attr("x",function(d,i){return i*11})
+      .attr("y",function(d){return 200-d.value})
+      .style("fill","steelblue");
+
+
 
   function onmouseover(d) {
   };
