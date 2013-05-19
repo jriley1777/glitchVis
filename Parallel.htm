@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://www.jasondavies.com/parallel-sets/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8">
+<title>Parallel Sets - Jason Davies</title>
+<style>
+@import url(d3.parsets.css);
+
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  width: 960px;
+  margin: 1em auto;
+  position: relative;
+}
+h1, h2, .dimension text {
+  text-align: center;
+  font-family: "PT Sans", Helvetica;
+  font-weight: 300;
+}
+h1 {
+  font-size: 4em;
+  margin: .5em 0 0 0;
+}
+h2 {
+  font-size: 2em;
+  margin: 1em 0 0.5em;
+  border-bottom: solid #ccc 1px;
+}
+p.meta, p.footer {
+  font-size: 13px;
+  color: #333;
+}
+p.meta {
+  text-align: center;
+}
+
+text.icicle { pointer-events: none; }
+
+.options { font-size: 12px; text-align: center; padding: 5px 0; }
+.curves { float: left; }
+.source { float: right; }
+pre, code { font-family: "Menlo", monospace; }
+
+.html .value,
+.javascript .string,
+.javascript .regexp {
+  color: #756bb1;
+}
+
+.html .tag,
+.css .tag,
+.javascript .keyword {
+  color: #3182bd;
+}
+
+.comment {
+  color: #636363;
+}
+
+.html .doctype,
+.javascript .number {
+  color: #31a354;
+}
+
+.html .attribute,
+.css .attribute,
+.javascript .class,
+.javascript .special {
+  color: #e6550d;
+}
+</style>
+
+<style type="text/css"></style></head><body>
+<h1>Parallel Sets</h1>
+<p class="meta">A visualisation technique for multidimensional categorical data.
+
+</p><h2>Titanic Survivors</h2>
+<div id="vis"></div>
+<div class="options">
+  <span class="source">Data: <a href="http://www.amstat.org/publications/jse/v3n3/datasets.dawson.html">Robert J. MacG. Dawson</a>.</span>
+  <span class="curves"><label for="curved"><input type="checkbox" id="curved" onchange="curves.call(this)"> Curves?</label></span>
+</div>
+
+<h2>Explanation</h2>
+<p>For each dimension (Survived, Sex, Age and Class), a horizontal bar is shown for each of its possible categories.  The width of the bar denotes the absolute number of matches for that category.
+</p><p>Starting with the first dimension (Survived), each of its categories is connected to a number of categories in the next dimension, showing how that category is subdivided. This subdividing is repeated recursively, producing a tree of “ribbons”.
+</p><p>In fact, you can imagine Parallel Sets as being an icicle plot, with icicles of the same category being “bundled” together.
+</p><p style="text-align: center"><label for="icicle" style="font-style: italic"><input type="checkbox" id="icicle"> Show icicle plot!</label>
+</p><p>Drag the dimensions and categories to reorder them. You can also click the “alpha” or “size” links that appear next to the dimension name on mouseover, to order the categories by name or frequency.
+
+</p><h2>Women and Children First?</h2>
+
+<p>We can see at a glance that the relative proportion of surviving women is far greater than that of the men.
+</p><p>As for children, it becomes clearer when we drag the <em>Age</em> dimension up: around half the children survived.  This is proportionally less than the women but more than the men.  Can you spot anything else interesting?
+
+</p><h2>Do It Yourself</h2>
+<p>The code is available as a reusable <a href="http://mbostock.github.com/d3/">D3.js</a> chart: <a href="https://github.com/jasondavies/d3-parsets">d3.parsets</a>.  This is a configurable function, which can be called on a D3 selection to produce an interactive SVG visualisation.
+</p><p>The input data should be bound to the target selection.  For input, you can either use an array of aggregated objects (pivot table) along with a <a href="https://github.com/jasondavies/d3-parsets#parsets_value">value</a> accessor, or you can simply use the full dataset and the grouped frequencies will be calculated automatically by default.
+
+</p><pre><code class="javascript"><span class="keyword">var</span> chart = d3.parsets()
+      .dimensions([<span class="string">"Survived"</span>, <span class="string">"Sex"</span>, <span class="string">"Age"</span>, <span class="string">"Class"</span>]);
+
+<span class="keyword">var</span> vis = d3.select(<span class="string">"#vis"</span>).append(<span class="string">"svg"</span>)
+    .attr(<span class="string">"width"</span>, chart.width())
+    .attr(<span class="string">"height"</span>, chart.height());
+
+d3.csv(<span class="string">"titanic.csv"</span>, <span class="function"><span class="keyword">function</span><span class="params">(csv)</span> {</span>
+  vis.datum(csv).call(chart);
+});</code></pre>
+
+
+<h2>Alternatives</h2>
+<p>For multivariate categorical data, the <a href="http://www.theusrus.de/blog/understanding-mosaic-plots/">mosaic plot</a> (or Marimekko chart) is a powerful alternative.  Personally, I think it’s easier to see the order in which the subsets were derived in a parallel sets visualisation.  On the other hand, it seems easier to spot small disparities in a mosaic plot because the subsets are laid out side-by-side.  Here is a <a href="http://bl.ocks.org/1005090">Marimekko chart</a> in D3.js by <a href="http://bost.ocks.org/mike/">Mike Bostock</a>.
+</p><p>For multivariate ordinal data (such as numeric data), <a href="http://en.wikipedia.org/wiki/Parallel_coordinates">parallel coordinates</a> are more appropriate, although you can often generate meaningful categories from such data for use with parallel sets.
+
+</p><h2>Implementation Notes</h2>
+
+<p>Probably the most interesting part of implementing this was supporting multiple concurrent transitions on the ribbons.  Strictly speaking this wasn’t necessary as it’s unlikely anyone would drag two things within the transition duration.  But who would pass up an opportunity to use a <a href="https://github.com/mbostock/d3/wiki/Transitions#wiki-tween">custom tween</a>?
+
+</p><p>This allows the <em>x-</em> and <em>y-</em> components of the ribbons to be animated independently, so that you can drag a dimension vertically even though a horizontal category animation is in progress.
+
+</p><p><label for="slow"><input type="checkbox" id="slow" onchange="vis.call(chart.duration(this.checked ? 5000 : 500))"> Go slow!</label>
+
+</p><p>In case you missed it, be sure to click on “icicle plots” in the Explanation section to see the animated transition.
+
+</p><p><a href="http://news.ycombinator.com/item?id=3878877">Discuss on HN!</a>
+
+</p><h2>Further Reading</h2>
+<ul>
+  <li>Functionality based on <a href="http://eagereyes.org/parallel-sets">Parallel Sets</a> by <a href="http://coitweb.uncc.edu/~rkosara/">Robert Kosara</a> and <a href="http://www.cs.brown.edu/people/cziemki/">Caroline Ziemkiewicz</a>.
+  </li><li><a href="http://kosara.net/publications/Kosara_BeautifulVis_2010.html">Turning a Table into a Tree: Growing Parallel Sets into a Purposeful Project</a> by Robert Kosara.
+  </li><li><a href="http://kosara.net/publications/Bendix_InfoVis_2005.html">Parallel Sets: Visual Analysis of Categorical Data</a> by Fabian Bendix, Robert Kosara, Helwig Hauser.
+</li></ul>
+
+<p class="footer">Made by <a href="http://www.jasondavies.com/">Jason Davies</a>.  Thanks to <a href="http://bost.ocks.org/mike">Mike Bostock</a> for his suggestions (and of course, <a href="http://mbostock.github.com/d3/">D3.js</a>!)
+
+<script src="./Parallel_files/d3.v2.min.js"></script>
+<script src="./Parallel_files/d3.parsets.js"></script>
+<script src="./Parallel_files/highlight.min.js"></script>
+<script>
+var chart = d3.parsets()
+    .dimensions(["cluster_nov11","cluster_dec11","cluster_jan12","cluster_feb12","cluster_mar12","cluster_apr12","cluster_may12","cluster_jun12"]);
+
+var height = 1200
+var vis = d3.select("#vis").append("svg")
+    .attr("width", chart.width())
+    .attr("height", height);
+
+var partition = d3.layout.partition()
+    .sort(null)
+    .size([chart.width(), height * 5 / 4])
+    .children(function(d) { return d.children ? d3.values(d.children) : null; })
+    .value(function(d) { return d.count; });
+
+var ice = false;
+
+function curves() {
+  var t = vis.transition().duration(500);
+  if (ice) {
+    t.delay(1000);
+    icicle();
+  }
+  t.call(chart.tension(this.checked ? .5 : 1));
+}
+
+d3.csv("parallelsetdata.csv", function(csv) {
+  vis.datum(csv).call(chart);
+
+  window.icicle = function() {
+    var newIce = this.checked,
+        tension = chart.tension();
+    if (newIce === ice) return;
+    if (ice = newIce) {
+      var dimensions = [];
+      vis.selectAll("g.dimension")
+         .each(function(d) { dimensions.push(d); });
+      dimensions.sort(function(a, b) { return a.y - b.y; });
+      var root = d3.parsets.tree({children: {}}, csv, dimensions.map(function(d) { return d.name; }), function() { return 1; }),
+          nodes = partition(root),
+          nodesByPath = {};
+      nodes.forEach(function(d) {
+        var path = d.data.name,
+            p = d;
+        while ((p = p.parent) && p.data.name) {
+          path = p.data.name + "\0" + path;
+        }
+        if (path) nodesByPath[path] = d;
+      });
+      var data = [];
+      vis.on("mousedown.icicle", stopClick, true)
+        .select(".ribbon").selectAll("path")
+          .each(function(d) {
+            var node = nodesByPath[d.path],
+                s = d.source,
+                t = d.target;
+            s.node.x0 = t.node.x0 = 0;
+            s.x0 = t.x0 = node.x;
+            s.dx0 = s.dx;
+            t.dx0 = t.dx;
+            s.dx = t.dx = node.dx;
+            data.push(d);
+          });
+      iceTransition(vis.selectAll("path"))
+          .attr("d", function(d) {
+            var s = d.source,
+                t = d.target;
+            return ribbonPath(s, t, tension);
+          })
+          .style("stroke-opacity", 1);
+      iceTransition(vis.selectAll("text.icicle")
+          .data(data)
+        .enter().append("text")
+          .attr("class", "icicle")
+          .attr("text-anchor", "middle")
+          .attr("dy", ".3em")
+          .attr("transform", function(d) {
+            return "translate(" + [d.source.x0 + d.source.dx / 2, d.source.dimension.y0 + d.target.dimension.y0 >> 1] + ")rotate(90)";
+          })
+          .text(function(d) { return d.source.dx > 15 ? d.node.name : null; })
+          .style("opacity", 1e-6))
+          .style("opacity", 1);
+      iceTransition(vis.selectAll("g.dimension rect, g.category")
+          .style("opacity", 1))
+          .style("opacity", 1e-6)
+          .each("end", function() { d3.select(this).attr("visibility", "hidden"); });
+      iceTransition(vis.selectAll("text.dimension"))
+          .attr("transform", "translate(0,-5)");
+      vis.selectAll("tspan.sort").style("visibility", "hidden");
+    } else {
+      vis.on("mousedown.icicle", null)
+        .select(".ribbon").selectAll("path")
+          .each(function(d) {
+            var s = d.source,
+                t = d.target;
+            s.node.x0 = s.node.x;
+            s.x0 = s.x;
+            s.dx = s.dx0;
+            t.node.x0 = t.node.x;
+            t.x0 = t.x;
+            t.dx = t.dx0;
+          });
+      iceTransition(vis.selectAll("path"))
+          .attr("d", function(d) {
+            var s = d.source,
+                t = d.target;
+            return ribbonPath(s, t, tension);
+          })
+          .style("stroke-opacity", null);
+      iceTransition(vis.selectAll("text.icicle"))
+          .style("opacity", 1e-6).remove();
+      iceTransition(vis.selectAll("g.dimension rect, g.category")
+          .attr("visibility", null)
+          .style("opacity", 1e-6))
+          .style("opacity", 1);
+      iceTransition(vis.selectAll("text.dimension"))
+          .attr("transform", "translate(0,-25)");
+      vis.selectAll("tspan.sort").style("visibility", null);
+    }
+  };
+  d3.select("#icicle")
+      .on("change", icicle)
+      .each(icicle);
+});
+
+function iceTransition(g) {
+  return g.transition().duration(1000);
+}
+
+function ribbonPath(s, t, tension) {
+  var sx = s.node.x0 + s.x0,
+      tx = t.node.x0 + t.x0,
+      sy = s.dimension.y0,
+      ty = t.dimension.y0;
+  return (tension === 1 ? [
+      "M", [sx, sy],
+      "L", [tx, ty],
+      "h", t.dx,
+      "L", [sx + s.dx, sy],
+      "Z"]
+   : ["M", [sx, sy],
+      "C", [sx, m0 = tension * sy + (1 - tension) * ty], " ",
+           [tx, m1 = tension * ty + (1 - tension) * sy], " ", [tx, ty],
+      "h", t.dx,
+      "C", [tx + t.dx, m1], " ", [sx + s.dx, m0], " ", [sx + s.dx, sy],
+      "Z"]).join("");
+}
+
+function stopClick() { d3.event.stopPropagation(); }
+
+// Given a text function and width function, truncates the text if necessary to
+// fit within the given width.
+function truncateText(text, width) {
+  return function(d, i) {
+    var t = this.textContent = text(d, i),
+        w = width(d, i);
+    if (this.getComputedTextLength() < w) return t;
+    this.textContent = "…" + t;
+    var lo = 0,
+        hi = t.length + 1,
+        x;
+    while (lo < hi) {
+      var mid = lo + hi >> 1;
+      if ((x = this.getSubStringLength(0, mid)) < w) lo = mid + 1;
+      else hi = mid;
+    }
+    return lo > 1 ? t.substr(0, lo - 2) + "…" : "";
+  };
+}
+
+d3.select("#file").on("change", function() {
+  var file = this.files[0],
+      reader = new FileReader;
+  reader.onloadend = function() {
+    var csv = d3.csv.parse(reader.result);
+    vis.datum(csv).call(chart
+        .value(csv[0].hasOwnProperty("Number") ? function(d) { return +d.Number; } : 1)
+        .dimensions(function(d) { return d3.keys(d[0]).filter(function(d) { return d !== "Number"; }).sort(); }));
+  };
+  reader.readAsText(file);
+});
+</script>
+</p><div style="background-color: rgba(242, 242, 242, 0.6); padding: 5px; position: absolute; left: 887px; top: 294px; display: none;">Perished, Male<br>1364, 62%</div><p class="copyright">© <a href="http://www.jasondavies.com/">Jason Davies</a> 2012.
+</p></body></html>
