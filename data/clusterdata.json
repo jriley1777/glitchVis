@@ -1,6 +1,6 @@
 {
 "nodes":[
-[{"node":0,"name":"Moderate Players"},
+{"node":0,"name":"Moderate Players"},
 {"node":1,"name":"Forum Posters"},
 {"node":2,"name":"Hardcore Player"},
 {"node":3,"name":"Unsucessful Casual Players"},
@@ -128,7 +128,7 @@
 {"node":125,"name":"Hardcore Players"},
 {"node":126,"name":"Forum Posters"},
 {"node":127,"name":"Item Category Diverse Moderate Players"},
-{"node":128,"name":"Quitters"}]
+{"node":128,"name":"Quitters"}
 ],
 
 "links":[
