@@ -3,7 +3,7 @@ var units = "People";
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
-    width = 1000 - margin.left - margin.right,
+    width = 2000 - margin.left - margin.right,
     height = 480 - margin.top - margin.bottom;
 
 
@@ -75,7 +75,7 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
 // add the rectangles for the nodes
   node.append("rect")
       .attr("height", function(d) {return d.dy; })
-      .attr("width", sankey.nodeWidth())
+      .attr("width", sankey.nodeWidth(  ))
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
       .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
       .on("mouseover", nodemouseover)

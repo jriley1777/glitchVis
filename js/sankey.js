@@ -164,9 +164,9 @@ d3.sankey = function() {
     initializeNodeDepth();
     resolveCollisions();
     for (var alpha = 0; iterations > 0; --iterations) {
-      relaxRightToLeft(.401001);
+      relaxRightToLeft();
       resolveCollisions();
-      relaxLeftToRight(.101111);
+      relaxLeftToRight();
       resolveCollisions();
     }
 
