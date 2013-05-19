@@ -4,7 +4,7 @@ var units = "People";
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
     width = 2000 - margin.left - margin.right,
-    height = 480 - margin.top - margin.bottom;
+    height = 1000 - margin.top - margin.bottom;
 
 
 var formatNumber = d3.format(",.0f"),    // zero decimal places
@@ -26,8 +26,8 @@ var svg2 = d3.select("#bar1").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(10)
-    .nodePadding(20)
+    .nodeWidth(50)
+    .nodePadding(10)
     .size([width, height]);
 
 var path = sankey.link(); //sankey.link() is something happening in sankey.js 
