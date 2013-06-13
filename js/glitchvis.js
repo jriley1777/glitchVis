@@ -3,7 +3,7 @@ var units = "People";
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
-    width = 2000 - margin.left - margin.right,
+    width = 3000 - margin.left - margin.right,
     height = 1000 - margin.top - margin.bottom;
 
 
@@ -26,7 +26,7 @@ var svg2 = d3.select("#bar1").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(50)
+    .nodeWidth(100)
     .nodePadding(10)
     .size([width, height]);
 
@@ -37,7 +37,7 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
 
   sankey.nodes(graph.nodes)
     .links(graph.links)
-    .layout(32);
+    .layout();
 
 // add in the links
   var link = svg.append("g").selectAll(".link")
