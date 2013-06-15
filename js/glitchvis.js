@@ -3,8 +3,8 @@ var units = "People";
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
-    width = 3000 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 
 var formatNumber = d3.format(",.0f"),    // zero decimal places
@@ -26,7 +26,7 @@ var svg2 = d3.select("#bar1").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(100)
+    .nodeWidth(30)
     .nodePadding(10)
     .size([width, height]);
 
@@ -84,18 +84,18 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
 
-// add in the title for the nodes
-  node.append("text")
-      .attr("x", -6)
-      .attr("y", function(d) { return d.dy / 2; })
-      .attr("dy", ".35em")
-      .attr("text-anchor", "end")
-      .attr("transform", null)
-      .text(function(d) { return d.name.replace(/-.*/, ""); })
-      //.style("font-size", 5)
-    .filter(function(d) { return d.x < width / 2; })//positioning left or right of node
-      .attr("x", 6 + sankey.nodeWidth())
-      .attr("text-anchor", "start");
+// // add in the title for the nodes
+//   node.append("text")
+//       .attr("x", -6)
+//       .attr("y", function(d) { return d.dy / 2; })
+//       .attr("dy", ".35em")
+//       .attr("text-anchor", "end")
+//       .attr("transform", null)
+//       .text(function(d) { return d.name.replace(/-.*/, ""); })
+//       //.style("font-size", 5)
+//     .filter(function(d) { return d.x < width / 2; })//positioning left or right of node
+//       .attr("x", 6 + sankey.nodeWidth())
+//       .attr("text-anchor", "start");
 
   // // the function for moving the nodes
   //   function dragmove(d) {
