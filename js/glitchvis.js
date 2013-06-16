@@ -35,7 +35,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(15)
+    .nodeWidth(20)
     .nodePadding(0)
     .size([width, height]);
 
