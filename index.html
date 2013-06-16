@@ -90,18 +90,7 @@
               }
           #unclicked {
                     stroke-opacity: 0.05;
-              }
-          .axis path,
-          .axis line {
-              fill: none;
-              stroke: black;
-              shape-rendering: crispEdges;
-          }
-
-          .axis text {
-              font-family: sans-serif;
-              font-size: 11px;
-          }    
+              }    
     </style>
 </head>
 <body>
@@ -118,7 +107,7 @@
       <div class="row-fluid">
         <div class="span8 offset2" align="center">
           <br>
-          <p>From the dataset posted through <a href="http://www.doeverythingforever.com/projects/the-glitch-dataset/">Do Everything Forever!</a>, this page will attempt to illustrate the activity in Tiny Speck's browser-based MMORPG <a href="www.glitch.com">Glitch</a> through the final 12 months of operation.  We present various visual tactics utilizing d3.js to quickly provide insights to decision makers and developers on analyzing auction house, social network, and forum activity with dashboard-friendly designs.  Notably, we hope to provide suggestions for additional ways in which analytics can be applied and presented to help monitor the health of your game...</p> 
+          <p>From the dataset posted through <a href="http://www.doeverythingforever.com/projects/the-glitch-dataset/">Do Everything Forever!</a>, this page will attempt to illustrate the activity in Tiny Speck's browser-based MMORPG <a href="www.glitch.com">Glitch</a> through the final 12 months of operation.  We present various visual tactics utilizing d3.js to quickly provide insights to decision makers and developers on analyzing player behaviors over time.  Notably, we hope to provide suggestions for additional ways in which analytics can be applied and presented to help monitor the health of your game...</p> 
         </div>
         <div id="talk1" class="span1">
           <img src="assets/graphics/bureaucrat.png" class="animated fadeInLeft" align="bottom-left">
@@ -132,11 +121,56 @@
     <br>
     <br>
 <hr>
-<center><h1 class="sections">Player Segmentation Over Time</h1></center>
+<center><h1 class="sections">Visualizating Player Migration Over Time</h1></center>
     <div class="row-fluid">
         <div class="span8 offset2" align="center">
           <br>
-          <p>Our first visual attempts to track movement in monthly player segmentation.  Can we identify signs of trouble from shifts in player clusters?  While we can utilize clustering methods at each interval to identify sizes of relative groupings, can further value be gained from showing migratory patterns over time?  Presented below, a sankey diagram can be an effective way to show flows between intervals.</p> 
+          <p>This first visual tracks movement in monthly player segmentation. Here we catch watch how players diverge and converge over time. We used clustering methods at each monthly interval to identify key groupings across four economic KPIs.</p> 
+          </div>
+        <div class="span4 offset4" align="left">
+           <p>Total Auctions</p>
+           <p>Average Auctions Posted per Day</p>
+           <p>Percentage of Auctions that Resulted in Sales</p>
+           <p>Number of Distinct Items Categories Posted</p>
+           <p>Marketplace Forum Posting (boolean)</p>
+          </div>
+
+          <div class="span8 offset2" align="center">
+          <br>
+          <p> Three overall hierarchies of player types emerged: Casual, Moderate, and Hardcore. Each have subtypes within. </p> 
+          
+                               <table border="0">
+                    <tr>
+                      <td><b>Casual:</b> These players perform below average across all economic indicators. On average, they post between 2-4 auctions per month across 1-2 item categories.</td>
+                      <td> <b>Moderate:</b> These players are midrange performers  across all dimensions. On average, they post between 11-28 auctions per month across 2-5 item categories.</td>
+                      <td><b>Hardcore:</b> These are the most active users across all KPIs. They typically post 152 auctions per month across 8 item categories.</td>
+                      <td><b>Forum:</b>  The primary characterization of this group is their activity in the market place forum. Forum players have a vey similar profile to hardcore players.</td>
+                    </tr>
+                    <tr>
+                      <td><b>Casual Losers:</b> less successful in auction house sales with 42% of auctions resulting in a sale</td>
+                      <td><b>Moderate Farmers:</b> post items in relatively fewer categories with a high number of auctions posts per day among the moderate group</td>
+                      <td></td>
+                      <td><b>Casual Forum:</b> This cluster appears only from Feb to May. We see forum posters with more casual play styles than </td>
+                    </tr>
+                    <tr>
+                      <td><b>Casual Winners:</b> highly successful with 100% of auctions resulting in a sale</td>
+                      <td><b>Moderate Miscellanea:</b>  post items in a more diverse set of categories with fewer overall postings compared with the moderate segment </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                     <tr>
+                      <td></td>
+                      <td><b>Moderate Losers:</b> have a higher of auctions per day with a success rate of 66% </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                      <tr>
+                      <td></td>
+                      <td><b>Moderate Winners:</b> 100% sales success but with fewer total auctions posted per month and more category focused</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    </table>
         </div>
       </div>
     <div class="row-fluid">
@@ -144,7 +178,25 @@
           <p id="chart"></p>
       </div>
     </div>
-  <br>        
+  <br>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span4">
+        <div id ="bar1"></div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <p>
+      </div>
+      <div class="span4">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <p>
+      </div>
+      <div class="span4">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <p>
+      </div>
+    </div>
+  </div>
+<hr>           
 
 <div id="jquery_jplayer_1" class="jp-jplayer" align="top-right"></div>
     <div id="jp_container_1" class="jp-audio">
