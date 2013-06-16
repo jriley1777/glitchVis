@@ -79,7 +79,9 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       //   return "transparent";
       // }})
       .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
-      .sort(function(a, b) { return b.dy - a.dy; });  
+      .sort(function(a, b) { return b.dy - a.dy; })
+      .on("mouseover",linkmouseover)
+      .on("mouseout",linkmouseout);  
 
 // add the link titles
   link.append("svg:title") //this is the mouseover stuff title is an svg element you can use "svg:title" or just "title"
@@ -158,11 +160,18 @@ function nodemouseout(d){
   d3.selectAll(".link")
       .attr("id", "unclicked");
     }
+function linkmouseover(d){
+  d3.select(this)
+      .attr("stroke-opacity",.5);
+    }
+function linkmouseout(d){
+  d3.select(this)
+      .attr("stroke-opacity",.05);
+    }
 
 //select all of our links and set a new stroke color on the conditioan that the value is =.01. 
 d3.selectAll(".link")
       .style("stroke-opacity", function(d){ 
-              console.log(d);
               if(d.value == 0.01) return 0;
               });
 
