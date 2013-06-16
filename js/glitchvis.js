@@ -54,6 +54,9 @@ svg.selectAll("text.values")
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+15) + ")";});
 
+var lossScale = d3.scale.linear()
+                  .domain([.5,1,1.5])
+                  .range(["red","black","green"]);
 svg.selectAll("text.loss")
   .data(months)
   .enter()
@@ -61,6 +64,7 @@ svg.selectAll("text.loss")
   .text(function(d){return d.loss})
   .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
+  .attr("stroke",function(d){ return lossScale(d.loss)})
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10-5) + ")";});
 
