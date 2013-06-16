@@ -1,12 +1,15 @@
 
 var units = "People";
-var months = [{month:"Nov-11",value:4573},{month:"Dec-11",value:4632},{month:"Jan-12",value:4029},{month:"Feb-12",value:2651},
-              {month:"Mar-12",value:2013},{month:"Apr-12",value:2039},{month:"May-12",value:2105},{month:"Jun-12",value:2016},
-              {month:"Jul-12",value:1663},{month:"Aug-12",value:1735},{month:"Sep-12",value:2092},{month:"Oct-12",value:2315},
-              {month:"Nov-12",value:2193},{month:"Dec-12",value:723}];
+var months = [{month:"Nov-11",value:4573,loss:null},{month:"Dec-11",value:4632,loss:1.01},
+              {month:"Jan-12",value:4029,loss:.87},{month:"Feb-12",value:2651,loss:.66},
+              {month:"Mar-12",value:2013,loss:.76},{month:"Apr-12",value:2039,loss:1.01},
+              {month:"May-12",value:2105,loss:1.03},{month:"Jun-12",value:2016,loss:.96},
+              {month:"Jul-12",value:1663,loss:.82},{month:"Aug-12",value:1735,loss:1.04},
+              {month:"Sep-12",value:2092,loss:1.21},{month:"Oct-12",value:2315,loss:1.11},
+              {month:"Nov-12",value:2193,loss:.95},{month:"Dec-12",value:723,loss:.33}];
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
-var margin = {top: 30, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
+var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1200 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -46,10 +49,20 @@ svg.selectAll("text.values")
   .enter()
   .append("text")
   .text(function(d){return d.value})
-  .attr("x",function(d,i){return i*82-margin.left-10})
+  .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
   .attr("transform", function(d){ 
-          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+20) + ")";});
+          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+15) + ")";});
+
+svg.selectAll("text.loss")
+  .data(months)
+  .enter()
+  .append("text")
+  .text(function(d){return d.loss})
+  .attr("x",function(d,i){return i*82-margin.left-5})
+  .attr("y",20)
+  .attr("transform", function(d){ 
+          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10-5) + ")";});
 
 svg.selectAll("text.months")
   .data(months)
@@ -79,7 +92,9 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       //   return "transparent";
       // }})
       .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
-      .sort(function(a, b) { return b.dy - a.dy; });  
+      .sort(function(a, b) { return b.dy - a.dy; })
+      .on("mouseover",linkmouseover)
+      .on("mouseout",linkmouseout);  
 
 // add the link titles
   link.append("svg:title") //this is the mouseover stuff title is an svg element you can use "svg:title" or just "title"
@@ -158,11 +173,18 @@ function nodemouseout(d){
   d3.selectAll(".link")
       .attr("id", "unclicked");
     }
+function linkmouseover(d){
+  d3.select(this)
+      .attr("stroke-opacity",.5);
+    }
+function linkmouseout(d){
+  d3.select(this)
+      .attr("stroke-opacity",.05);
+    }
 
 //select all of our links and set a new stroke color on the conditioan that the value is =.01. 
 d3.selectAll(".link")
       .style("stroke-opacity", function(d){ 
-              console.log(d);
               if(d.value == 0.01) return 0;
               });
 
