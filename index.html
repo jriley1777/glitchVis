@@ -90,7 +90,18 @@
               }
           #unclicked {
                     stroke-opacity: 0.05;
-              }    
+              }
+          .axis path,
+          .axis line {
+              fill: none;
+              stroke: black;
+              shape-rendering: crispEdges;
+          }
+
+          .axis text {
+              font-family: sans-serif;
+              font-size: 11px;
+          }    
     </style>
 </head>
 <body>

@@ -1,16 +1,29 @@
 
 var units = "People";
+var months = [{month:"Nov-11",value:4400},{month:"Dec-11",value:4573},{month:"Jan-12",value:4029},{month:"Feb-12",value:2651},
+              {month:"Mar-12",value:1981},{month:"Apr-12",value:1904},{month:"May-12",value:2039},{month:"Jun-12",value:2016},
+              {month:"Jul-12",value:1663},{month:"Aug-12",value:1272},{month:"Sep-12",value:1732},{month:"Oct-12",value:2084},
+              {month:"Nov-12",value:2193},{month:"Dec-12",value:723}];
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
-var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
+var margin = {top: 30, right: 10, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1200 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 550 - margin.top - margin.bottom;
 
 
 var formatNumber = d3.format(",.0f"),    // zero decimal places
     format = function(d) { return formatNumber(d) + " " + units; },
     color = d3.scale.category20b();//CHANGE
 
+var axisScale = d3.scale.linear()
+                  .domain([4600,0])
+                  .range([0, height]);
+
+//Create the Axis
+var yAxis = d3.svg.axis()
+              .scale(axisScale)
+              .orient("left")
+              .ticks(10);
 
 // append the svg canvas to the page
 var svg = d3.select("#chart").append("svg") //will select the id of cahrt from index.html ln:135 --> # looks for the id= from html
@@ -20,17 +33,33 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");
 
-var svg2 = d3.select("#bar1").append("svg")
-    .attr("width", 450)
-    .attr("height", 200);
-
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(10)
+    .nodeWidth(15)
     .nodePadding(0)
     .size([width, height]);
 
 var path = sankey.link(); //sankey.link() is something happening in sankey.js 
+
+svg.selectAll("text.values")
+  .data(months)
+  .enter()
+  .append("text")
+  .text(function(d){return d.value})
+  .attr("x",function(d,i){return i*83-margin.left-10})
+  .attr("y",20)
+  .attr("transform", function(d){ 
+          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+30) + ")";});
+
+svg.selectAll("text.months")
+  .data(months)
+  .enter()
+  .append("text")
+  .text(function(d){return d.month})
+  .attr("x",function(d,i){return i*82-margin.left-10})
+  .attr("y",20)
+  .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
 // load the data
 d3.json("data/12months.json", function(error, graph) { //this is in the data folder
@@ -109,16 +138,6 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
   //     link.attr("d", path);
   //   }
 
-  //CREATING A BARCHART
-  svg2.selectAll("rect")
-      .data(graph.links)
-      .enter().append("rect")
-      .attr("width",10)
-      .attr("height",function(d){return d.value})
-      .attr("x",function(d,i){return i*11})
-      .attr("y",function(d){return 200-d.value})
-      .style("fill","steelblue");
-
 
 var status=null;
 function nodemouseover(d){
@@ -147,5 +166,10 @@ d3.selectAll(".link")
               if(d.value == 0.01) return 0;
               });
 
-
+//y axis
+  svg.append("g")
+      .call(yAxis)
+      .attr("class", "axis")
+      .attr("transform", 
+        "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
 });
