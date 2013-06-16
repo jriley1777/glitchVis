@@ -1,12 +1,12 @@
 
 var units = "People";
-var months = [{month:"Nov-11",value:4573,loss:null},{month:"Dec-11",value:4632,loss:1.01},
-              {month:"Jan-12",value:4029,loss:.87},{month:"Feb-12",value:2651,loss:.66},
-              {month:"Mar-12",value:2013,loss:.76},{month:"Apr-12",value:2039,loss:1.01},
-              {month:"May-12",value:2105,loss:1.03},{month:"Jun-12",value:2016,loss:.96},
-              {month:"Jul-12",value:1663,loss:.82},{month:"Aug-12",value:1735,loss:1.04},
-              {month:"Sep-12",value:2092,loss:1.21},{month:"Oct-12",value:2315,loss:1.11},
-              {month:"Nov-12",value:2193,loss:.95},{month:"Dec-12",value:723,loss:.33}];
+var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,loss:1.01},
+              {month:"Jan/12",value:4029,loss:.87},{month:"Feb/12",value:2651,loss:.66},
+              {month:"Mar/12",value:2013,loss:.76},{month:"Apr/12",value:2039,loss:1.01},
+              {month:"May/12",value:2105,loss:1.03},{month:"Jun/12",value:2016,loss:.96},
+              {month:"Jul/12",value:1663,loss:.82},{month:"Aug/12",value:1735,loss:1.04},
+              {month:"Sep/12",value:2092,loss:1.21},{month:"Oct/12",value:2315,loss:1.11},
+              {month:"Nov/12",value:2193,loss:.95},{month:"Dec/12",value:723,loss:.33}];
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
@@ -38,7 +38,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(15)
+    .nodeWidth(20)
     .nodePadding(0)
     .size([width, height]);
 
@@ -49,6 +49,7 @@ svg.selectAll("text.values")
   .enter()
   .append("text")
   .text(function(d){return d.value})
+  .attr("class", "innerText")
   .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
   .attr("transform", function(d){ 
@@ -62,6 +63,7 @@ svg.selectAll("text.loss")
   .enter()
   .append("text")
   .text(function(d){return d.loss})
+  .attr("class", "innerText")
   .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
   .attr("stroke",function(d){ return lossScale(d.loss)})
@@ -72,6 +74,7 @@ svg.selectAll("text.months")
   .data(months)
   .enter()
   .append("text")
+  .attr("class", "innerText")
   .text(function(d){return d.month})
   .attr("x",function(d,i){return i*82-margin.left-10})
   .attr("y",20)
