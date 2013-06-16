@@ -18,7 +18,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
     .attr("height", height + margin.top + margin.bottom)
     .append("g") //group everything on the vancas together.  will edit down on ln38 below
     .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");
 
 var svg2 = d3.select("#bar1").append("svg")
     .attr("width", 450)
@@ -26,7 +26,7 @@ var svg2 = d3.select("#bar1").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(20)
+    .nodeWidth(10)
     .nodePadding(0)
     .size([width, height]);
 
@@ -37,7 +37,7 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
 
   sankey.nodes(graph.nodes)
     .links(graph.links)
-    .layout(32);
+    .layout(0);
 
 // add in the links
   var link = svg.append("g").selectAll(".link")
@@ -81,6 +81,7 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       .style("stroke-width",.5)
       .on("mouseover", nodemouseover)
       .on("mouseout", nodemouseout)
+      .attr("cursor","pointer")
     .append("title")
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
@@ -118,38 +119,6 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       .attr("y",function(d){return 200-d.value})
       .style("fill","steelblue");
 
-
-
-  function onmouseover(d) {
-  };
-
-  function onmouseout(d) {
-  };
-
-// crab = d3.select("#crabland")
-//          .append("svg")
-//           .attr("width", 1600)
-//           .attr("height", 800)
-//           .style("pointer-events", "all")
-//           .on("mousemove", particle);
-
-// function particle(d){
-//     var m = d3.mouse(this) // this = whatever you are are selecting "this", you are controlling this by only calling the function on links (not nodes)
-//       console.log(m);
-//       crab.append("image")
-//       .attr("xlink:href","assets/graphics/happycrab2.gif")
-//       .attr("x", m[0])
-//       .attr("y", m[1])
-//       .attr("width", Math.random()*700)
-//       .attr("height", Math.random()*700)
-//       .transition()
-//       .ease("elastic")
-//       .attr("x", m[0]+(Math.random()*2-1)*400)
-//       .attr("y", m[1]+(Math.random()*2-1)*400)
-//       .delay(500)
-//       .duration(15000)
-//       .remove();
-//     }
 
 var status=null;
 function nodemouseover(d){

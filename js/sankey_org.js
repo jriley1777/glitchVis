@@ -51,7 +51,7 @@ d3.sankey = function() {
   };
 
   sankey.link = function() {
-    var curvature = .5;
+    var curvature = .1;
 
     function link(d) {
       var x0 = d.source.x + d.source.dx,
@@ -172,7 +172,7 @@ d3.sankey = function() {
     initializeNodeDepth();
     resolveCollisions();
     for (var alpha = 1; iterations > 0; --iterations) {
-      relaxRightToLeft(alpha *= .99);
+      relaxRightToLeft(alpha *= 1);
       resolveCollisions();
       relaxLeftToRight(alpha);
       resolveCollisions();
