@@ -42,7 +42,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(20)
+    .nodeWidth(25)
     .nodePadding(0)
     .size([width, height]);
 
@@ -128,13 +128,13 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
   node.append("rect")
       .attr("height", function(d) {return d.dy; })
       .attr("width", sankey.nodeWidth(  ))
-      .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
-      .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
-      .style("stroke-width",.5)
+      .style("fill", function(d) { return d.color; }) //matches name with the colors here! inside the replace is some sort of regex
+      // .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
+      // .style("stroke-width",.5)
       .on("mouseover", nodemouseover)
       .on("mouseout", nodemouseout)
       .attr("cursor","pointer")
-    .append("title")
+      .append("title")
       .text(function(d) { 
       return d.name + "\n" + format(d.value); });
 
