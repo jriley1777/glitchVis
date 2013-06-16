@@ -1,6 +1,6 @@
 {
 "nodes":[
-{"name":"Moderate","node":0,"month":"Nov-11"},
+{"name":"Moderate","node":0,"month":"Nov/11","color":""},
 {"name":"Forum","node":1,"month":"Nov-11"},
 {"name":"Hardcore","node":2,"month":"Nov-11"},
 {"name":"Casual Losers","node":3,"month":"Nov-11"},
