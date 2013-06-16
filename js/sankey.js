@@ -119,7 +119,16 @@ d3.sankey = function() {
         node.x = x;
         node.dx = nodeWidth;
         node.sourceLinks.forEach(function(link) {
-          nextNodes.push(link.target);
+        	var inArray = false;
+        	for(var k = 0; k < nextNodes.length; k++) {
+        		if(nextNodes[k].node == link.target.node) {
+        			inArray = true;
+        			break;
+        		}
+        	}
+        	if( inArray == false ) {
+        		nextNodes.push(link.target);
+        	}
         });
       });
       remainingNodes = nextNodes;

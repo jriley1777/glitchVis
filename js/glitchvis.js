@@ -3,7 +3,7 @@ var units = "People";
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 10, right: 10, bottom: 10, left: 10}, //comma is the equivalent of var : 
-    width = 1000 - margin.left - margin.right,
+    width = 1200 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 
@@ -26,18 +26,18 @@ var svg2 = d3.select("#bar1").append("svg")
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
-    .nodeWidth(30)
-    .nodePadding(10)
+    .nodeWidth(20)
+    .nodePadding(0)
     .size([width, height]);
 
 var path = sankey.link(); //sankey.link() is something happening in sankey.js 
 
 // load the data
-d3.json("data/clusterdata.json", function(error, graph) { //this is in the data folder
+d3.json("data/12months.json", function(error, graph) { //this is in the data folder
 
   sankey.nodes(graph.nodes)
     .links(graph.links)
-    .layout();
+    .layout(32);
 
 // add in the links
   var link = svg.append("g").selectAll(".link")
@@ -78,6 +78,7 @@ d3.json("data/clusterdata.json", function(error, graph) { //this is in the data 
       .attr("width", sankey.nodeWidth(  ))
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); }) //matches name with the colors here! inside the replace is some sort of regex
       .style("stroke",function(d) { return d3.rgb(d.color).darker(1); }) //line around the box formatting
+      .style("stroke-width",.5)
       .on("mouseover", nodemouseover)
       .on("mouseout", nodemouseout)
     .append("title")

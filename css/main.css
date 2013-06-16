@@ -1,7 +1,7 @@
-.node rect {
+/*.node rect {
 	fill-opacity: .9;
 	shape-rendering: crispEdges;
-	}
+	}*/
 
 .node text {
 	pointer-events: none;
