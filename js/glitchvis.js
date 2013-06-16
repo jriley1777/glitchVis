@@ -6,7 +6,7 @@ var months = [{month:"Nov-11",value:4400},{month:"Dec-11",value:4573},{month:"Ja
               {month:"Nov-12",value:2193},{month:"Dec-12",value:723}];
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
-var margin = {top: 30, right: 10, bottom: 40, left: 100}, //comma is the equivalent of var : 
+var margin = {top: 30, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1200 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -46,7 +46,7 @@ svg.selectAll("text.values")
   .enter()
   .append("text")
   .text(function(d){return d.value})
-  .attr("x",function(d,i){return i*83-margin.left-10})
+  .attr("x",function(d,i){return i*82-margin.left-10})
   .attr("y",20)
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+30) + ")";});
