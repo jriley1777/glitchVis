@@ -8,8 +8,8 @@
 {"name":"Moderate Farmers","node":5,"month":"Nov-11"},
 {"name":"Moderate","node":6,"month":"Dec-11"},
 {"name":"Moderate Farmers","node":7,"month":"Dec-11"},
-{"name":"Forum","node":8,"month":"Dec-11"},
-{"name":"Forum Posters","node":9,"month":"Dec-11"},
+{"name":"Casual Losers","node":8,"month":"Dec-11"},
+{"name":"Forum","node":9,"month":"Dec-11"},
 {"name":"Casual Winners","node":10,"month":"Dec-11"},
 {"name":"Hardcore","node":11,"month":"Dec-11"},
 {"name":"Moderate Farmers","node":12,"month":"Jan-12"},
@@ -84,11 +84,11 @@
 {"name":"Casual","node":81,"month":"Nov-12"},
 {"name":"Moderate Miscellanea","node":82,"month":"Nov-12"},
 {"name":"Hardcore","node":83,"month":"Nov-12"},
-{"name":"Casual Players","node":84,"month":"Dec-12"},
-{"name":"Item Category Focused Moderate Players","node":85,"month":"Dec-12"},
-{"name":"Hardcore Players","node":86,"month":"Dec-12"},
-{"name":"Forum Posters","node":87,"month":"Dec-12"},
-{"name":"Item Category Diverse Moderate Players","node":88,"month":"Dec-12"}
+{"name":"Casual","node":84,"month":"Dec-12"},
+{"name":"Moderate Farmers","node":85,"month":"Dec-12"},
+{"name":"Hardcore","node":86,"month":"Dec-12"},
+{"name":"Forum","node":87,"month":"Dec-12"},
+{"name":"Moderate Miscellanea","node":88,"month":"Dec-12"}
 ],
 
 "links":[
