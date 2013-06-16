@@ -1,8 +1,8 @@
 
 var units = "People";
-var months = [{month:"Nov-11",value:4400},{month:"Dec-11",value:4573},{month:"Jan-12",value:4029},{month:"Feb-12",value:2651},
-              {month:"Mar-12",value:1981},{month:"Apr-12",value:1904},{month:"May-12",value:2039},{month:"Jun-12",value:2016},
-              {month:"Jul-12",value:1663},{month:"Aug-12",value:1272},{month:"Sep-12",value:1732},{month:"Oct-12",value:2084},
+var months = [{month:"Nov-11",value:4573},{month:"Dec-11",value:4632},{month:"Jan-12",value:4029},{month:"Feb-12",value:2651},
+              {month:"Mar-12",value:2013},{month:"Apr-12",value:2039},{month:"May-12",value:2105},{month:"Jun-12",value:2016},
+              {month:"Jul-12",value:1663},{month:"Aug-12",value:1735},{month:"Sep-12",value:2092},{month:"Oct-12",value:2315},
               {month:"Nov-12",value:2193},{month:"Dec-12",value:723}];
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
@@ -49,7 +49,7 @@ svg.selectAll("text.values")
   .attr("x",function(d,i){return i*82-margin.left-10})
   .attr("y",20)
   .attr("transform", function(d){ 
-          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+30) + ")";});
+          return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+20) + ")";});
 
 svg.selectAll("text.months")
   .data(months)
