@@ -28,6 +28,10 @@ var yAxis = d3.svg.axis()
               .orient("left")
               .ticks(10);
 
+var lossScale = d3.scale.linear()
+                  .domain([.95,1,1.05])
+                  .range(["red","black","green"]);
+
 // append the svg canvas to the page
 var svg = d3.select("#chart").append("svg") //will select the id of cahrt from index.html ln:135 --> # looks for the id= from html
     .attr("width", width + margin.left + margin.right)
@@ -48,16 +52,13 @@ svg.selectAll("text.values")
   .data(months)
   .enter()
   .append("text")
-  .text(function(d){return d.value})
+  .text(function(d){return formatNumber(d.value)})
   .attr("class", "innerText")
   .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+15) + ")";});
 
-var lossScale = d3.scale.linear()
-                  .domain([.5,1,1.5])
-                  .range(["red","black","green"]);
 svg.selectAll("text.loss")
   .data(months)
   .enter()
@@ -66,7 +67,7 @@ svg.selectAll("text.loss")
   .attr("class", "innerText")
   .attr("x",function(d,i){return i*82-margin.left-5})
   .attr("y",20)
-  .attr("stroke",function(d){ return lossScale(d.loss)})
+  .attr("fill",function(d){ return lossScale(d.loss)})
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10-5) + ")";});
 
