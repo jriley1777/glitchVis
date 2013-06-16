@@ -99,7 +99,7 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       //   if(i.source.node == 8 && i.target.node == 14){
       //   return "transparent";
       // }})
-      .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
+      .style("stroke-width", function(d) { return Math.max(.5, d.dy/5); })   //setting the stroke length by the data . d.dy is defined in sankey.js
       .sort(function(a, b) { return b.dy - a.dy; })
       .on("mouseover",linkmouseover)
       .on("mouseout",linkmouseout);  
