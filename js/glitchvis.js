@@ -10,7 +10,7 @@ var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,l
 
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
-    width = 1200 - margin.left - margin.right,
+    width = 1300 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
 
@@ -54,7 +54,7 @@ svg.selectAll("text.values")
   .append("text")
   .text(function(d){return formatNumber(d.value)})
   .attr("class", "innerText")
-  .attr("x",function(d,i){return i*82-margin.left-5})
+  .attr("x",function(d,i){return i*89-margin.left-5})
   .attr("y",20)
   .attr("transform", function(d){ 
           return "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -(d.value/10+15) + ")";});
@@ -65,7 +65,7 @@ svg.selectAll("text.loss")
   .append("text")
   .text(function(d){return d.loss})
   .attr("class", "innerText")
-  .attr("x",function(d,i){return i*82-margin.left-5})
+  .attr("x",function(d,i){return i*89-margin.left-5})
   .attr("y",20)
   .attr("fill",function(d){ return lossScale(d.loss)})
   .attr("transform", function(d){ 
@@ -77,7 +77,7 @@ svg.selectAll("text.months")
   .append("text")
   .attr("class", "innerText")
   .text(function(d){return d.month})
-  .attr("x",function(d,i){return i*82-margin.left-10})
+  .attr("x",function(d,i){return i*89-margin.left-10})
   .attr("y",20)
   .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
@@ -99,7 +99,7 @@ d3.json("data/12months.json", function(error, graph) { //this is in the data fol
       //   if(i.source.node == 8 && i.target.node == 14){
       //   return "transparent";
       // }})
-      .style("stroke-width", function(d) { return Math.max(.5, d.dy/5); })   //setting the stroke length by the data . d.dy is defined in sankey.js
+      .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
       .sort(function(a, b) { return b.dy - a.dy; })
       .on("mouseover",linkmouseover)
       .on("mouseout",linkmouseout);  
