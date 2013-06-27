@@ -83,7 +83,7 @@ svg.selectAll("text.months")
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
 // load the data
-d3.json("data/12months.json", function(error, graph) { //this is in the data folder
+d3.json("data/12months2.json", function(error, graph) { //this is in the data folder
 
   sankey.nodes(graph.nodes)
     .links(graph.links)
