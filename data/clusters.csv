@@ -1,0 +1,12 @@
+id,name,desc,
+1,"Casual","These players perform below average across all economic indicators. On average, they post between 2-4 auctions per month across 1-2 item categories.",
+2,"Moderate","These players are midrange performers across all dimensions. On average, they post between 11-28 auctions per month across 2-5 item categories.",
+3,"Hardcore","These are the most active users across all KPIs. They typically post 152 auctions per month across 8 item categories.",
+4,"Forum","The primary characterization of this group is their activity in the market place forum. Forum players have a vey similar profile to hardcore players.",
+5,"Casual Losers","This cohort is less successful in auction house sales with 42% of auctions resulting in a sale.",
+6,"Moderate Farmers","This group posts items in relatively fewer categories with a high number of auctions posts per day among the moderate group.",
+7,"Casual Forum","This cluster appears only from Feb to May. We see forum posters with more casual play styles than those more similar to the hardcore segment.",
+8,"Casual Winners","This casual group is highly successful with 100% of auctions resulting in a sale.  While they are successful auctioneers, this is not resulting in a significant increase in user engagement.",
+9,"Moderate Miscellanea","These players post items in a more diverse set of categories with fewer overall postings compared with the moderate segment.",
+10,"Moderate Losers","These players have a higher number of auctions per day with a success rate of 66%.",
+11,"Moderate Winners","This group of moderate players have 100% sales success but fewer total auctions posted per month.  They are also more category-focused with their auctions."
