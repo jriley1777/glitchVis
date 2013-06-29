@@ -200,6 +200,7 @@ blockquote:after {
 }
 
 .link:hover {
+  stroke: #000;
   stroke-opacity: 2;
 }
 

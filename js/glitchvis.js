@@ -84,7 +84,7 @@ svg.selectAll("text.months")
 
 // load the data
 d3.json("data/12months2.json", function(error, graph) { //this is in the data folder
-
+d3.csv("data/clusters.csv",function(error,clust){
   sankey.nodes(graph.nodes)
     .links(graph.links)
     .layout(0);
@@ -202,4 +202,5 @@ d3.selectAll(".link")
       .attr("class", "axis")
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
+  })
 });
