@@ -133,10 +133,10 @@ d3.csv("data/clusters.csv",function(error,clust){
       // .style("stroke-width",.5)
       .on("mouseover", nodemouseover)
       .on("mouseout", nodemouseout)
-      .attr("cursor","pointer")
-      .append("title")
-      .text(function(d) { 
-      return d.name + "\n" + format(d.value); });
+      .attr("cursor","pointer");
+      // .append("title")
+      // .text(function(d) { 
+      // return d.name + "\n" + format(d.value); });
 
 // // add in the title for the nodes
 //   node.append("text")
@@ -164,22 +164,35 @@ d3.csv("data/clusters.csv",function(error,clust){
 
 var status=null;
 function nodemouseover(d){
+
+  var desc;
+  for(i=0;i<clust.length;i++){
+    if(clust[i].name==d.name){
+      desc=clust[i].desc;
+    }
+  }
   d3.selectAll(".link")
       .attr("id", function(i){
         if (i.source.node == d.node || i.target.node == d.node){
           status="clicked";
-          console.log(status);
         } else {
           status=null;
         }
         return status;
-        console.log(i.source.node,status);
     });
+
+      $("#clustable").html(d.name);
+      $("#pcount").html(format(d.value));
+      $("#clusdesc").html(desc);
     }
 
 function nodemouseout(d){
   d3.selectAll(".link")
       .attr("id", "unclicked");
+
+  $("#clustable").html("Mouse over a node to see cluster information");
+  $("#pcount").html("");
+  $("#clusdesc").html("");
     }
 function linkmouseover(d){
   d3.select(this)
