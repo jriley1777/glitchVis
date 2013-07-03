@@ -170,6 +170,9 @@ d3.csv("data/clusters.csv",function(error,clust){
 var status=null;
 function nodemouseover(d){
 
+  d3.select(this)
+    .attr("fill-opacity",.7);
+
   var desc;
   for(i=0;i<clust.length;i++){
     if(clust[i].name==d.name){
@@ -192,6 +195,9 @@ function nodemouseover(d){
     }
 
 function nodemouseout(d){
+    d3.select(this)
+    .attr("fill-opacity",1);
+
   d3.selectAll(".link")
       .attr("id", "unclicked");
 
@@ -227,70 +233,22 @@ d3.selectAll(".link")
 
 function onclick(d){
 
-d3.select("svg").remove();
+  d3.selectAll(".link").remove();
+  var data1 = 1;
 
-  var p = [20, 50, 30, 20],
-    x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]),
-    y = d3.scale.linear().range([0, height - margin.top - margin.bottom]),
-    z = d3.scale.ordinal().range(["lightpink", "darkgray", "lightblue"]),
-    parse = d3.time.format("%m/%Y").parse,
-    format = d3.time.format("%b");
+  d3.select("svg")
+    .append("text")
+    .text("Go back to the total population view.")
+    .attr("x",500)
+    .attr("y",200)
+    .attr("font-family","Pontano Sans")
+    .attr("font-size",20)
+    .attr("fill","blue")
+    .attr("cursor","pointer") 
+    .on("click",mainVis);
 
-var svg = d3.select("#chart").append("svg:svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("svg:g")
-    .attr("transform", "translate(" + margin.left + "," + (height - margin.bottom) + ")");
+// add in the nodes (creating the groups of the rectanlges)
+  d3.select(this)
+    .on("click", onclick);
 
-d3.csv("data/stacked.csv", function(crimea) {
-
-  // Transpose the data into layers by cause.
-  var causes = d3.layout.stack()(["wounds", "other", "disease"].map(function(cause) {
-    return crimea.map(function(d) {
-      return {x: parse(d.date), y: +d[cause]};
-    });
-  }));
-
-  // Compute the x-domain (by date) and y-domain (by top).
-  x.domain(causes[0].map(function(d) { return d.x; }));
-  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y0 + d.y; })]);
-
-  // Add a group for each cause.
-  var cause = svg.selectAll("g.cause")
-      .data(causes)
-    .enter().append("svg:g")
-      .attr("class", "cause")
-      .style("fill", function(d, i) { return z(i); })
-      .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
-
-  // Add a rect for each date.
-  var rect = cause.selectAll("rect")
-      .data(Object)
-    .enter().append("svg:rect")
-      .attr("x", function(d) { return x(d.x); })
-      .attr("y", function(d) { return -y(d.y0) - y(d.y); })
-      .attr("height", function(d) { return y(d.y); })
-      .attr("width", x.rangeBand())
-      .on("mouseover",function(d){
-        d3.select(this)
-          .attr("fill-opacity",.3);
-      })
-      .on("mouseout",function(d){
-        d3.select(this)
-          .attr("fill-opacity",1);
-      })
-      .attr("cursor","pointer")
-      .on("click", mainVis);
-
-  // Add a label per date.
-  var label = svg.selectAll("text")
-      .data(x.domain())
-    .enter().append("svg:text")
-      .attr("x", function(d) { return x(d) + x.rangeBand() / 2; })
-      .attr("y", 6)
-      .attr("text-anchor", "middle")
-      .attr("dy", ".71em")
-      .text(format);
-
-});
 }
