@@ -233,10 +233,15 @@ d3.selectAll(".link")
 
 function onclick(d){
 
-  d3.selectAll(".link").remove();
+  d3.selectAll(".link")
+      .transition()
+      .duration(1000)
+      .style("stroke-width","1px")
+      .remove();
   var data1 = 1;
 
   d3.select("svg")
+    //.data(data1)
     .append("text")
     .text("Go back to the total population view.")
     .attr("x",500)
@@ -246,6 +251,29 @@ function onclick(d){
     .attr("fill","blue")
     .attr("cursor","pointer") 
     .on("click",mainVis);
+
+d3.json("data/12months2.json", function(error, graph) {
+  d3.json("data/clustclick.json", function(error, clustclick){
+
+      var clicks = clustclick.clickvals;
+      var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
+      console.log(graph.nodes);
+
+      d3.selectAll("rect")
+        .data(clickfilt)
+        .transition()
+        .duration(100)
+        .attr("height",function(j){
+          return j.value
+          //   if(d.name==j.monthclust.split("/")[0] & j.monthclust.split("/")[1]==d.month){
+          //     console.log(d);
+          //     console.log(j);
+          //     return j.value;
+          // }
+        })
+        .attr("width",70);
+    })
+})
 
 // add in the nodes (creating the groups of the rectanlges)
   d3.select(this)
