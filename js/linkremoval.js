@@ -7,12 +7,12 @@ var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,l
               {month:"Jul/12",value:1663,loss:.82},{month:"Aug/12",value:1735,loss:1.04},
               {month:"Sep/12",value:2092,loss:1.21},{month:"Oct/12",value:2315,loss:1.11},
               {month:"Nov/12",value:2193,loss:.95},{month:"Dec/12",value:723,loss:.33}];
-              
-var colors = [{name:"Casual Forum",color:"#95d5af"},{name:"Casual Losers",color:"#95d5af"},
-            {name:"Casual Winners",color:"#95d5af"},{name:"Moderate Miscellanea",color:"#95d5af"},
-            {name:"Moderate Farmers",color:"#95d5af"},{name:"Moderate Losers",color:"#95d5af"},
-            {name:"Moderate Winners",color:"#95d5af"},{name:"Forum",color:"#95d5af"},
-            {name:"Hardcore",color:"#95d5af"}]
+
+var colors = [{name:"Casual Forum",color:"#c7f3d8"},{name:"Casual Losers",color:"#95d5af"},
+            {name:"Casual Winners",color:"#53b67d"},{name:"Moderate Miscellanea",color:"#c7bfce"},
+            {name:"Moderate Farmers",color:"#a898b6"},{name:"Moderate Losers",color:"#806b91"},
+            {name:"Moderate Winners",color:"#5d4a6c"},{name:"Moderate",color:"#332341"},{name:"Forum",color:"#f3bd4e"},
+            {name:"Hardcore",color:"#5089a8"},{name:"Casual",color:"#398b5c"},];
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1300 - margin.left - margin.right,
@@ -32,6 +32,9 @@ function mainVis(d){
 
 d3.select("text").remove();
 d3.selectAll(".cause").remove();
+  d3.selectAll("#losses").transition().remove();
+  d3.selectAll("#values").transition().remove();
+  d3.selectAll("#months").remove();
 
 // d3.select("svg").remove();
 
@@ -67,6 +70,7 @@ svg.selectAll("text.values")
   .append("text")
   .text(function(d){return formatNumber(d.value)})
   .attr("class", "innerText")
+  .attr("id", "values")
   .attr("x",function(d,i){return i*89-margin.left-5})
   .attr("y",20)
   .attr("transform", function(d){ 
@@ -78,6 +82,7 @@ svg.selectAll("text.loss")
   .append("text")
   .text(function(d){return d.loss})
   .attr("class", "innerText")
+  .attr("id", "losses")
   .attr("x",function(d,i){return i*89-margin.left-5})
   .attr("y",20)
   .attr("fill",function(d){ return lossScale(d.loss)})
@@ -89,6 +94,7 @@ svg.selectAll("text.months")
   .enter()
   .append("text")
   .attr("class", "innerText")
+  .attr("id", "months")
   .text(function(d){return d.month})
   .attr("x",function(d,i){return i*89-margin.left-10})
   .attr("y",20)
@@ -243,6 +249,7 @@ d3.selectAll(".link")
 function onclick(d){
 
   d3.select("text").remove();
+  d3.selectAll("#months").remove();
 
   d3.selectAll(".link")
       .transition()
@@ -267,18 +274,31 @@ function onclick(d){
     .attr("cursor","pointer") 
     .on("click",mainVis);
 
-  d3.selectAll(".innerText").transition().remove();
+  d3.selectAll("#losses").transition().remove();
+  d3.selectAll("#values").transition().remove();
   d3.selectAll(".axis").transition().remove();
+
+  svg.selectAll("text.months")
+  .data(months)
+  .enter()
+  .append("text")
+  .attr("class", "innerText")
+  .attr("id","months")
+  .text(function(d){return d.month})
+  .attr("x",function(d,i){return i*89-margin.left-10})
+  .attr("y",20)
+  .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
 d3.json("data/12months2.json", function(error, graph) {
   d3.json("data/clustclick.json", function(error, clustclick){
 
-    x = d3.scale.ordinal().rangeRoundBands([0, width + margin.right + margin.left]);
-    y = d3.scale.linear().range([0, height - margin.top - margin.bottom]);
+    x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]);
+    y = d3.scale.linear().range([0, height]);
 
     var clicks = clustclick.clickvals;
     var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
-    console.log(graph.nodes);
+    
  // Transpose the data into layers by cause.
     var causes = d3.layout.stack()(["value"].map(function(cause) {
       return clickfilt.map(function(d) {
@@ -288,9 +308,9 @@ d3.json("data/12months2.json", function(error, graph) {
 
     // Compute the x-domain (by date) and y-domain (by top).
   x.domain(causes[0].map(function(d) { return d.x; }));
-  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y0 + d.y; })]);
+  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y + d.y0 ; })]);
   
-  console.log(graph.nodes);
+  console.log(causes);
 
 // Add a group for each cause.
   var cause = svg.selectAll("g.cause")
@@ -303,14 +323,17 @@ d3.json("data/12months2.json", function(error, graph) {
   var rect = cause.selectAll("rect")
       .data(Object)
     .enter().append("svg:rect")
-      .attr("x", function(d) { return x(d.x); })
+      .attr("x", function(d) { return x(d.x)*1.185+38; })
       .attr("y", function(d) { return -y(d.y0) - y(d.y); })
       .attr("height", function(d) { return y(d.y); })
-      .attr("width", 75)
-      .style("fill", function(d, i) {if(d.z==colors.name){
-        console.log(colors.name);
-        return colors.color
-      } 
+      .attr("width", 30)
+      .style("fill", function(d, i) {
+        var colscheme = colors.filter(function(j){return j.name==d.z});
+        console.log(colscheme[0]);
+        console.log(d.z);
+        if(colscheme.length>0){
+          return colscheme[0].color
+        }
     })
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
