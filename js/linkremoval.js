@@ -7,16 +7,33 @@ var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,l
               {month:"Jul/12",value:1663,loss:.82},{month:"Aug/12",value:1735,loss:1.04},
               {month:"Sep/12",value:2092,loss:1.21},{month:"Oct/12",value:2315,loss:1.11},
               {month:"Nov/12",value:2193,loss:.95},{month:"Dec/12",value:723,loss:.33}];
+              
+var colors = [{name:"Casual Forum",color:"#95d5af"},{name:"Casual Losers",color:"#95d5af"},
+            {name:"Casual Winners",color:"#95d5af"},{name:"Moderate Miscellanea",color:"#95d5af"},
+            {name:"Moderate Farmers",color:"#95d5af"},{name:"Moderate Losers",color:"#95d5af"},
+            {name:"Moderate Winners",color:"#95d5af"},{name:"Forum",color:"#95d5af"},
+            {name:"Hardcore",color:"#95d5af"}]
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1300 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
+// append the svg canvas to the page
+var svg = d3.select("#chart").append("svg") //will select the id of cahrt from index.html ln:135 --> # looks for the id= from html
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g") //group everything on the vancas together.  will edit down on ln38 below
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");    
+
 mainVis();
 
 function mainVis(d){
 
-d3.select("svg").remove();
+d3.select("text").remove();
+d3.selectAll(".cause").remove();
+
+// d3.select("svg").remove();
 
 var formatNumber = d3.format(",.0f"),    // zero decimal places
     format = function(d) { return formatNumber(d) + " " + units; },
@@ -35,14 +52,6 @@ var yAxis = d3.svg.axis()
 var lossScale = d3.scale.linear()
                   .domain([.95,1,1.05])
                   .range(["red","black","green"]);
-
-// append the svg canvas to the page
-var svg = d3.select("#chart").append("svg") //will select the id of cahrt from index.html ln:135 --> # looks for the id= from html
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g") //group everything on the vancas together.  will edit down on ln38 below
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");
 
 // Set the sankey diagram properties
 var sankey = d3.sankey() //calling the function
@@ -233,11 +242,17 @@ d3.selectAll(".link")
 
 function onclick(d){
 
+  d3.select("text").remove();
+
   d3.selectAll(".link")
       .transition()
       .duration(1000)
       .style("stroke-width","1px")
       .remove();
+  d3.selectAll(".node")
+      .attr("cursor","default")
+      .attr("fill-opacity",0)
+      .remove();    
   var data1 = 1;
 
   d3.select("svg")
@@ -252,26 +267,55 @@ function onclick(d){
     .attr("cursor","pointer") 
     .on("click",mainVis);
 
+  d3.selectAll(".innerText").transition().remove();
+  d3.selectAll(".axis").transition().remove();
+
 d3.json("data/12months2.json", function(error, graph) {
   d3.json("data/clustclick.json", function(error, clustclick){
 
-      var clicks = clustclick.clickvals;
-      var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
-      console.log(graph.nodes);
+    x = d3.scale.ordinal().rangeRoundBands([0, width + margin.right + margin.left]);
+    y = d3.scale.linear().range([0, height - margin.top - margin.bottom]);
 
-      d3.selectAll("rect")
-        .data(clickfilt)
-        .transition()
-        .duration(100)
-        .attr("height",function(j){
-          return j.value
-          //   if(d.name==j.monthclust.split("/")[0] & j.monthclust.split("/")[1]==d.month){
-          //     console.log(d);
-          //     console.log(j);
-          //     return j.value;
-          // }
-        })
-        .attr("width",70);
+    var clicks = clustclick.clickvals;
+    var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
+    console.log(graph.nodes);
+ // Transpose the data into layers by cause.
+    var causes = d3.layout.stack()(["value"].map(function(cause) {
+      return clickfilt.map(function(d) {
+        return {x: d.monthclust.split("/")[1], y: +d[cause], z: d.monthclust.split("/")[0]};
+      });
+    }));
+
+    // Compute the x-domain (by date) and y-domain (by top).
+  x.domain(causes[0].map(function(d) { return d.x; }));
+  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y0 + d.y; })]);
+  
+  console.log(graph.nodes);
+
+// Add a group for each cause.
+  var cause = svg.selectAll("g.cause")
+      .data(causes)
+    .enter().append("svg:g")
+      .attr("class", "cause");
+      // .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
+
+  // Add a rect for each date.
+  var rect = cause.selectAll("rect")
+      .data(Object)
+    .enter().append("svg:rect")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("y", function(d) { return -y(d.y0) - y(d.y); })
+      .attr("height", function(d) { return y(d.y); })
+      .attr("width", 75)
+      .style("fill", function(d, i) {if(d.z==colors.name){
+        console.log(colors.name);
+        return colors.color
+      } 
+    })
+      .attr("transform", 
+        "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
+      .on("mouseover",function(d){d3.select(this).attr("fill-opacity",0.7)})
+      .on("mouseout",function(d){d3.select(this).attr("fill-opacity",1)});
     })
 })
 
