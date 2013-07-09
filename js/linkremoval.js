@@ -30,7 +30,7 @@ mainVis();
 
 function mainVis(d){
 
-d3.select("text").remove();
+d3.selectAll("#goback").remove();
 d3.selectAll(".cause").remove();
   d3.selectAll("#losses").transition().remove();
   d3.selectAll("#values").transition().remove();
@@ -247,7 +247,7 @@ d3.selectAll(".link")
 
 
 function onclick(d){
-
+  d3.selectAll("#goback").remove();
   d3.select("text").remove();
   d3.selectAll("#months").remove();
 
@@ -266,6 +266,7 @@ function onclick(d){
     //.data(data1)
     .append("text")
     .text("Go back to the total population view.")
+    .attr("id","goback")
     .attr("x",500)
     .attr("y",200)
     .attr("font-family","Pontano Sans")
