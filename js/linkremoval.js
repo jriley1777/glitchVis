@@ -263,12 +263,12 @@ function onclick(d){
   var data1 = 1;
 
   d3.select("svg")
-    //.data(data1)
     .append("text")
     .text("Go back to the total population view.")
     .attr("id","goback")
-    .attr("x",500)
-    .attr("y",200)
+    .attr("x",480)
+    .attr("y",20)
+    .style("margin-top","-300px")
     .attr("font-family","Pontano Sans")
     .attr("font-size",20)
     .attr("fill","blue")
@@ -300,6 +300,8 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
 
     x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]);
     y = d3.scale.linear().range([0, height]);
+    z = d3.scale.ordinal().range(["#c7f3d8","#95d5af","#53b67d","#398b5c","#c7bfce","#a898b6","#806b91","#5d4a6c",
+                                  "#332341","#f3bd4e","#5089a8"]);
 
     var clicks = clustclick;
     console.log(clicks);
@@ -311,8 +313,8 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
     var causes = d3.layout.stack()(["Casual Forum","Casual Losers","Casual Winners","Casual",
       "Moderate Miscellanea","Moderate Farmers","Moderate Losers","Moderate Winners",
       "Moderate","Forum","Hardcore"].map(function(cause) {
-      return clickfilt.map(function(d, i) {
-        return {x: d.month, y: +d[cause]}, z:maps[i];
+      return clickfilt.map(function(d) {
+        return {x: d.month, y: +d[cause]};
       });
     }));
 
@@ -320,14 +322,22 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
   x.domain(causes[0].map(function(d) { return d.x; }));
   y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y + d.y0 ; })]);
   
-  console.log(causes);
+for(i=0;i++;i<colors.length){
+  if(d3.keys(clickfilt[0])==colors.name){
+    return console.log(colors.color);
+  }
+  else { return console.log("nope");}
+  }
 
 // Add a group for each cause.
   var cause = svg.selectAll("g.cause")
       .data(causes)
     .enter().append("svg:g")
-      .attr("class", "cause");
-      // .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
+      .attr("class", "cause")
+      .style("fill", function(d, i) {
+        return z(i);
+      });
+      //.style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
 
   // Add a rect for each date.
   var rect = cause.selectAll("rect")
@@ -337,13 +347,17 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
       .attr("y", function(d) { return -y(d.y0) - y(d.y); })
       .attr("height", function(d) { return y(d.y); })
       .attr("width", 30)
-      .style("fill", function(d, i) {
-        console.log(d);
-      })
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
-      .on("mouseover",function(d){d3.select(this).attr("fill-opacity",0.7)})
-      .on("mouseout",function(d){d3.select(this).attr("fill-opacity",1)});
+      .on("mouseover",function(d){
+        d3.select(this).attr("fill-opacity",0.7);
+        $("#onclick").html(d.y+" People");
+      })
+      .on("mouseout",function(d){
+        d3.select(this).attr("fill-opacity",1);
+        $("#onclick").html("");
+
+      });
 });
 
 // add in the nodes (creating the groups of the rectanlges)
