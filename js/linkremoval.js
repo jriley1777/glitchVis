@@ -253,7 +253,7 @@ function onclick(d){
 
   d3.selectAll(".link")
       .transition()
-      .duration(1000)
+      .duration(500)
       .style("stroke-width","1px")
       .remove();
   d3.selectAll(".node")
