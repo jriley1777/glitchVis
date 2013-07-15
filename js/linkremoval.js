@@ -346,7 +346,7 @@ for(i=0;i++;i<colors.length){
       .attr("x", function(d) { return x(d.x)*1.185+38; })
       .attr("y", function(d) { return -y(d.y0) - y(d.y); })
       .attr("height", function(d) { return y(d.y); })
-      .attr("width", 30)
+      .attr("width", 27)
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
       .on("mouseover",function(d){
