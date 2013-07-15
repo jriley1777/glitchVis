@@ -1,4 +1,3 @@
-
 var units = "People";
 var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,loss:1.01},
               {month:"Jan/12",value:4029,loss:.87},{month:"Feb/12",value:2651,loss:.66},
@@ -9,10 +8,11 @@ var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,l
               {month:"Nov/12",value:2193,loss:.95},{month:"Dec/12",value:723,loss:.33}];
 
 var colors = [{name:"Casual Forum",color:"#c7f3d8"},{name:"Casual Losers",color:"#95d5af"},
-            {name:"Casual Winners",color:"#53b67d"},{name:"Moderate Miscellanea",color:"#c7bfce"},
+            {name:"Casual Winners",color:"#53b67d"},{name:"Casual",color:"#398b5c"},
+            {name:"Moderate Miscellanea",color:"#c7bfce"},
             {name:"Moderate Farmers",color:"#a898b6"},{name:"Moderate Losers",color:"#806b91"},
             {name:"Moderate Winners",color:"#5d4a6c"},{name:"Moderate",color:"#332341"},{name:"Forum",color:"#f3bd4e"},
-            {name:"Hardcore",color:"#5089a8"},{name:"Casual",color:"#398b5c"},];
+            {name:"Hardcore",color:"#5089a8"}];
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1300 - margin.left - margin.right,
@@ -291,19 +291,28 @@ function onclick(d){
   .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
-d3.json("data/12months2.json", function(error, graph) {
-  d3.json("data/clustclick.json", function(error, clustclick){
+
+
+d3.csv("data/clustclicked.csv", function(clustclick) {
+
+    console.log(colors[0].color);
+    console.log(d3.keys(clustclick[0]));
 
     x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]);
     y = d3.scale.linear().range([0, height]);
 
-    var clicks = clustclick.clickvals;
+    var clicks = clustclick;
+    console.log(clicks);
     var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
-    
+    var maps = ["Casual Forum","Casual Losers","Casual Winners","Casual",
+      "Moderate Miscellanea","Moderate Farmers","Moderate Losers","Moderate Winners",
+      "Moderate","Forum","Hardcore"];
  // Transpose the data into layers by cause.
-    var causes = d3.layout.stack()(["value"].map(function(cause) {
-      return clickfilt.map(function(d) {
-        return {x: d.monthclust.split("/")[1], y: +d[cause], z: d.monthclust.split("/")[0]};
+    var causes = d3.layout.stack()(["Casual Forum","Casual Losers","Casual Winners","Casual",
+      "Moderate Miscellanea","Moderate Farmers","Moderate Losers","Moderate Winners",
+      "Moderate","Forum","Hardcore"].map(function(cause) {
+      return clickfilt.map(function(d, i) {
+        return {x: d.month, y: +d[cause]}, z:maps[i];
       });
     }));
 
@@ -329,19 +338,13 @@ d3.json("data/12months2.json", function(error, graph) {
       .attr("height", function(d) { return y(d.y); })
       .attr("width", 30)
       .style("fill", function(d, i) {
-        var colscheme = colors.filter(function(j){return j.name==d.z});
-        console.log(colscheme[0]);
-        console.log(d.z);
-        if(colscheme.length>0){
-          return colscheme[0].color
-        }
-    })
+        console.log(d);
+      })
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
       .on("mouseover",function(d){d3.select(this).attr("fill-opacity",0.7)})
       .on("mouseout",function(d){d3.select(this).attr("fill-opacity",1)});
-    })
-})
+});
 
 // add in the nodes (creating the groups of the rectanlges)
   d3.select(this)
