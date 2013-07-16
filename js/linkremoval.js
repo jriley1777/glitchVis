@@ -29,6 +29,8 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 mainVis();
 
 function mainVis(d){
+  $("#depart").html("");
+  $("#joined").html("");
 d3.selectAll(".axis").remove();
 
 d3.selectAll("#goback").remove();
@@ -103,7 +105,7 @@ svg.selectAll("text.months")
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
 // load the data
-d3.json("data/12months2.json", function(error, graph) { //this is in the data folder
+d3.json("data/12months_departures_joiners.json", function(error, graph) { //this is in the data folder
 d3.csv("data/clusters.csv",function(error,clust){
   sankey.nodes(graph.nodes)
     .links(graph.links)
@@ -208,6 +210,8 @@ function nodemouseover(d){
       $("#clustable").html(d.name);
       $("#pcount").html(format(d.value));
       $("#clusdesc").html(desc);
+      $("#depart").html(d.departing+" players left the game in the following period.");
+      $("#joined").html(d.joining+" new players joined the game into this cluster.");
     }
 
 function nodemouseout(d){
@@ -220,6 +224,8 @@ function nodemouseout(d){
   $("#clustable").html("Mouse over a node to see cluster information");
   $("#pcount").html("");
   $("#clusdesc").html("");
+  $("#depart").html("");
+  $("#joined").html("");
     }
 function linkmouseover(d){
   d3.select(this)
@@ -265,13 +271,13 @@ function onclick(d){
 
   d3.select("svg")
     .append("text")
-    .text("Go back to the total population view.")
+    .text("Back to Sankey")
     .attr("id","goback")
-    .attr("x",500)
-    .attr("y",20)
+    .attr("x",840)
+    .attr("y",17)
     .style("margin-top","-300px")
     .attr("font-family","Pontano Sans")
-    .attr("font-size",20)
+    .attr("font-size",15)
     .attr("fill","blue")
     .attr("cursor","pointer") 
     .on("click",mainVis);
