@@ -297,9 +297,9 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
 
     console.log(colors[0].color);
     console.log(d3.keys(clustclick[0]));
-
+    height = 470;
     x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]);
-    y = d3.scale.linear().range([0, height]);
+    y = d3.scale.linear().domain([0,2000]).range([0, height]);
     z = d3.scale.ordinal().range(["#c7f3d8","#95d5af","#53b67d","#398b5c","#c7bfce","#a898b6","#806b91","#5d4a6c",
                                   "#332341","#f3bd4e","#5089a8"]);
 
@@ -320,7 +320,7 @@ d3.csv("data/clustclicked.csv", function(clustclick) {
 
     // Compute the x-domain (by date) and y-domain (by top).
   x.domain(causes[0].map(function(d) { return d.x; }));
-  y.domain([0, d3.max(causes[causes.length - 1], function(d) { console.log(causes[causes.length - 1]); return d.y + d.y0 ; })]);
+  y.domain([0, d3.max(causes[causes.length - 1], function(d) {return d.y + d.y0 ; })]);
   
 for(i=0;i++;i<colors.length){
   if(d3.keys(clickfilt[0])==colors.name){
@@ -356,12 +356,10 @@ for(i=0;i++;i<colors.length){
       .on("mouseout",function(d){
         d3.select(this).attr("fill-opacity",1);
         $("#onclick").html("");
-
       });
-});
 
 var axisScale = d3.scale.linear()
-                  .domain([2000,0])
+                  .domain([d3.max(causes[causes.length - 1], function(d) {return d.y + d.y0 ; }),0])
                   .range([0, height]);
 
 //Create the Axis
@@ -370,8 +368,12 @@ var yAxis = d3.svg.axis()
               .orient("left")
               .ticks(10);
 
+
 d3.selectAll(".axis").transition()
   .call(yAxis);
+
+});
+
 // add in the nodes (creating the groups of the rectanlges)
   d3.select(this)
     .on("click", onclick);
