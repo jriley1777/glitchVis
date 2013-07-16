@@ -210,7 +210,7 @@ function nodemouseover(d){
       $("#clustable").html(d.name);
       $("#pcount").html(format(d.value));
       $("#clusdesc").html(desc);
-      $("#depart").html(d.departing+" players left the game in the following period.");
+      $("#depart").html(d.departing+" of these players left the game in the following period.");
       $("#joined").html(d.joining+" new players joined the game into this cluster.");
     }
 
