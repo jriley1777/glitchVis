@@ -267,7 +267,7 @@ function onclick(d){
     .append("text")
     .text("Go back to the total population view.")
     .attr("id","goback")
-    .attr("x",480)
+    .attr("x",500)
     .attr("y",20)
     .style("margin-top","-300px")
     .attr("font-family","Pontano Sans")
