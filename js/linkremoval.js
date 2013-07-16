@@ -309,7 +309,7 @@ d3.json("data/12months2.json", function(error, graph) {
 
     // Compute the x-domain (by date) and y-domain (by top).
   x.domain(causes[0].map(function(d) { return d.x; }));
-  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y + d.y0 ; })]);
+  y.domain([0, d3.max(causes[causes.length - 1], function(d) { console.log(causes[causes.length - 1]); return d.y + d.y0 ; })]);
   
   console.log(causes);
 
@@ -339,7 +339,14 @@ d3.json("data/12months2.json", function(error, graph) {
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
       .on("mouseover",function(d){d3.select(this).attr("fill-opacity",0.7)})
-      .on("mouseout",function(d){d3.select(this).attr("fill-opacity",1)});
+      .on("mouseout",function(d){
+        d3.select(this)
+        .attr("fill-opacity",1)
+
+        $("#clustable").html(d.name);
+        $("#pcount").html(format(d.value));
+        $("#clusdesc").html(desc);
+                            });
     })
 })
 
