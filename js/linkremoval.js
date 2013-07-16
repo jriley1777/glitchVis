@@ -24,17 +24,28 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
     .attr("height", height + margin.top + margin.bottom)
     .append("g") //group everything on the vancas together.  will edit down on ln38 below
     .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");    
+          "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + -height + ")");  
+
+    d3.select("svg")
+      .append("text")
+      .text("Player Count")
+      .attr("x",30)
+      .attr("y",17)
+      .attr("font-family","Pontano Sans")
+      .attr("font-size",20)
+      .attr("fill","black")
+      .attr("transform", function(d){ 
+          return "translate(" + 0 + "," + 50 + ") rotate(-90 150 150)";});
 
 mainVis();
 
 function mainVis(d){
   $("#depart").html("");
   $("#joined").html("");
-d3.selectAll(".axis").remove();
+  d3.selectAll(".axis").remove();
 
-d3.selectAll("#goback").remove();
-d3.selectAll(".cause").remove();
+  d3.selectAll("#goback").remove();
+  d3.selectAll(".cause").remove();
   d3.selectAll("#losses").transition().remove();
   d3.selectAll("#values").transition().remove();
   d3.selectAll("#months").remove();
@@ -247,7 +258,7 @@ d3.selectAll(".link")
       .call(yAxis)
       .attr("class", "axis")
       .attr("transform", 
-         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
+         "translate(" + -25 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
   })
 });
 }
