@@ -223,6 +223,7 @@ function nodemouseover(d){
       $("#clusdesc").html(desc);
       $("#depart").html(d.departing+" of these players left the game in the following period.");
       $("#joined").html(d.joining+" new players joined the game into this cluster.");
+      $("#instructions").html("Click on a node to explore the entire history of this player group.");
     }
 
 function nodemouseout(d){
@@ -237,6 +238,7 @@ function nodemouseout(d){
   $("#clusdesc").html("");
   $("#depart").html("");
   $("#joined").html("");
+  $("#instructions").html("");
     }
 function linkmouseover(d){
   d3.select(this)
