@@ -1,4 +1,3 @@
-
 var units = "People";
 var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,loss:1.01},
               {month:"Jan/12",value:4029,loss:.87},{month:"Feb/12",value:2651,loss:.66},
@@ -9,10 +8,11 @@ var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,l
               {month:"Nov/12",value:2193,loss:.95},{month:"Dec/12",value:723,loss:.33}];
 
 var colors = [{name:"Casual Forum",color:"#c7f3d8"},{name:"Casual Losers",color:"#95d5af"},
-            {name:"Casual Winners",color:"#53b67d"},{name:"Moderate Miscellanea",color:"#c7bfce"},
+            {name:"Casual Winners",color:"#53b67d"},{name:"Casual",color:"#398b5c"},
+            {name:"Moderate Miscellanea",color:"#c7bfce"},
             {name:"Moderate Farmers",color:"#a898b6"},{name:"Moderate Losers",color:"#806b91"},
             {name:"Moderate Winners",color:"#5d4a6c"},{name:"Moderate",color:"#332341"},{name:"Forum",color:"#f3bd4e"},
-            {name:"Hardcore",color:"#5089a8"},{name:"Casual",color:"#398b5c"},];
+            {name:"Hardcore",color:"#5089a8"}];
 //this is the svg canvas attributes: (not buidlign abything just seeting up varaibels)
 var margin = {top: 40, right: 20, bottom: 40, left: 100}, //comma is the equivalent of var : 
     width = 1300 - margin.left - margin.right,
@@ -29,6 +29,7 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 mainVis();
 
 function mainVis(d){
+d3.selectAll(".axis").remove();
 
 d3.selectAll("#goback").remove();
 d3.selectAll(".cause").remove();
@@ -240,7 +241,7 @@ d3.selectAll(".link")
       .call(yAxis)
       .attr("class", "axis")
       .attr("transform", 
-        "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
+         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + -(height) + ")");
   })
 });
 }
@@ -253,7 +254,7 @@ function onclick(d){
 
   d3.selectAll(".link")
       .transition()
-      .duration(1000)
+      .duration(500)
       .style("stroke-width","1px")
       .remove();
   d3.selectAll(".node")
@@ -263,12 +264,12 @@ function onclick(d){
   var data1 = 1;
 
   d3.select("svg")
-    //.data(data1)
     .append("text")
     .text("Go back to the total population view.")
     .attr("id","goback")
-    .attr("x",500)
-    .attr("y",200)
+    .attr("x",480)
+    .attr("y",20)
+    .style("margin-top","-300px")
     .attr("font-family","Pontano Sans")
     .attr("font-size",20)
     .attr("fill","blue")
@@ -277,7 +278,6 @@ function onclick(d){
 
   d3.selectAll("#losses").transition().remove();
   d3.selectAll("#values").transition().remove();
-  d3.selectAll(".axis").transition().remove();
 
   svg.selectAll("text.months")
   .data(months)
@@ -291,19 +291,30 @@ function onclick(d){
   .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ") scale(1,-1) translate(" + 0 + "," + margin.bottom + ")");
 
-d3.json("data/12months2.json", function(error, graph) {
-  d3.json("data/clustclick.json", function(error, clustclick){
+
+
+d3.csv("data/clustclicked.csv", function(clustclick) {
+
+    console.log(colors[0].color);
+    console.log(d3.keys(clustclick[0]));
 
     x = d3.scale.ordinal().rangeRoundBands([0, width - margin.right - margin.left]);
     y = d3.scale.linear().range([0, height]);
+    z = d3.scale.ordinal().range(["#c7f3d8","#95d5af","#53b67d","#398b5c","#c7bfce","#a898b6","#806b91","#5d4a6c",
+                                  "#332341","#f3bd4e","#5089a8"]);
 
-    var clicks = clustclick.clickvals;
+    var clicks = clustclick;
+    console.log(clicks);
     var clickfilt = clicks.filter(function(j){return j.clicked.split("/")[0]==d.name & j.clicked.split("/")[1]==d.month;});
-    
+    var maps = ["Casual Forum","Casual Losers","Casual Winners","Casual",
+      "Moderate Miscellanea","Moderate Farmers","Moderate Losers","Moderate Winners",
+      "Moderate","Forum","Hardcore"];
  // Transpose the data into layers by cause.
-    var causes = d3.layout.stack()(["value"].map(function(cause) {
+    var causes = d3.layout.stack()(["Casual Forum","Casual Losers","Casual Winners","Casual",
+      "Moderate Miscellanea","Moderate Farmers","Moderate Losers","Moderate Winners",
+      "Moderate","Forum","Hardcore"].map(function(cause) {
       return clickfilt.map(function(d) {
-        return {x: d.monthclust.split("/")[1], y: +d[cause], z: d.monthclust.split("/")[0]};
+        return {x: d.month, y: +d[cause]};
       });
     }));
 
@@ -311,14 +322,22 @@ d3.json("data/12months2.json", function(error, graph) {
   x.domain(causes[0].map(function(d) { return d.x; }));
   y.domain([0, d3.max(causes[causes.length - 1], function(d) { console.log(causes[causes.length - 1]); return d.y + d.y0 ; })]);
   
-  console.log(causes);
+for(i=0;i++;i<colors.length){
+  if(d3.keys(clickfilt[0])==colors.name){
+    return console.log(colors.color);
+  }
+  else { return console.log("nope");}
+  }
 
 // Add a group for each cause.
   var cause = svg.selectAll("g.cause")
       .data(causes)
     .enter().append("svg:g")
-      .attr("class", "cause");
-      // .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
+      .attr("class", "cause")
+      .style("fill", function(d, i) {
+        return z(i);
+      });
+      //.style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
 
   // Add a rect for each date.
   var rect = cause.selectAll("rect")
@@ -327,29 +346,32 @@ d3.json("data/12months2.json", function(error, graph) {
       .attr("x", function(d) { return x(d.x)*1.185+38; })
       .attr("y", function(d) { return -y(d.y0) - y(d.y); })
       .attr("height", function(d) { return y(d.y); })
-      .attr("width", 30)
-      .style("fill", function(d, i) {
-        var colscheme = colors.filter(function(j){return j.name==d.z});
-        console.log(colscheme[0]);
-        console.log(d.z);
-        if(colscheme.length>0){
-          return colscheme[0].color
-        }
-    })
+      .attr("width", 27)
       .attr("transform", 
         "translate(" + -45 + "," + 0 + ") scale(1,-1) translate(" + 0 + "," + 0 + ")")
-      .on("mouseover",function(d){d3.select(this).attr("fill-opacity",0.7)})
+      .on("mouseover",function(d){
+        d3.select(this).attr("fill-opacity",0.7);
+        $("#onclick").html(d.y+" People");
+      })
       .on("mouseout",function(d){
-        d3.select(this)
-        .attr("fill-opacity",1)
+        d3.select(this).attr("fill-opacity",1);
+        $("#onclick").html("");
 
-        $("#clustable").html(d.name);
-        $("#pcount").html(format(d.value));
-        $("#clusdesc").html(desc);
-                            });
-    })
-})
+      });
+});
 
+var axisScale = d3.scale.linear()
+                  .domain([2000,0])
+                  .range([0, height]);
+
+//Create the Axis
+var yAxis = d3.svg.axis()
+              .scale(axisScale)
+              .orient("left")
+              .ticks(10);
+
+d3.selectAll(".axis").transition()
+  .call(yAxis);
 // add in the nodes (creating the groups of the rectanlges)
   d3.select(this)
     .on("click", onclick);
