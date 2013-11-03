@@ -1,4 +1,8 @@
 var units = "People";
+var desc,
+    departers,
+    joiners;
+
 var months = [{month:"Nov/11",value:4573,loss:null},{month:"Dec/11",value:4632,loss:1.01},
               {month:"Jan/12",value:4029,loss:.87},{month:"Feb/12",value:2651,loss:.66},
               {month:"Mar/12",value:2013,loss:.76},{month:"Apr/12",value:2039,loss:1.01},
@@ -40,10 +44,9 @@ var svg = d3.select("#chart").append("svg") //will select the id of cahrt from i
 mainVis();
 
 function mainVis(d){
-  $("#depart").html("");
-  $("#joined").html("");
-  d3.selectAll(".axis").remove();
 
+  d3.selectAll(".axis").remove();
+  d3.select("#desc").transition().remove();
   d3.selectAll("#goback").remove();
   d3.selectAll(".cause").remove();
   d3.selectAll("#losses").transition().remove();
@@ -127,11 +130,7 @@ d3.csv("data/clusters.csv",function(error,clust){
       .data(graph.links)
     .enter().append("path")
       .attr("class", "link")
-      .attr("d", path) //d??? look it up later 
-      // .style("stroke",function(d){
-      //   if(i.source.node == 8 && i.target.node == 14){
-      //   return "transparent";
-      // }})
+      .attr("d", path)
       .style("stroke-width", function(d) { return Math.max(.5, d.dy); })   //setting the stroke length by the data . d.dy is defined in sankey.js
       .sort(function(a, b) { return b.dy - a.dy; })
       .on("mouseover",linkmouseover)
@@ -151,11 +150,6 @@ d3.csv("data/clusters.csv",function(error,clust){
       .attr("transform", function(d) { 
           return "translate(" + d.x + "," + d.y + ")";
       });
-    //.call(d3.behavior.drag()   <---------- THIS IS THE DRAG THING TO REMOVE!!
-      //.origin(function(d) { return d; })
-      // .on("dragstart", function() {  //<-------- THIS IS MOUSEOVER DRAG CAPABILITIES .on(mousemove) called pointer events, look it up!
-      // this.parentNode.appendChild(this); }) 
-      // .on("drag", dragmove);
   
 // add the rectangles for the nodes
   node.append("rect")
@@ -168,33 +162,6 @@ d3.csv("data/clusters.csv",function(error,clust){
       .on("mouseout", nodemouseout)
       .on("click", onclick)
       .attr("cursor","pointer");
-      // .append("title")
-      // .text(function(d) { 
-      // return d.name + "\n" + format(d.value); });
-
-// // add in the title for the nodes
-//   node.append("text")
-//       .attr("x", -6)
-//       .attr("y", function(d) { return d.dy / 2; })
-//       .attr("dy", ".35em")
-//       .attr("text-anchor", "end")
-//       .attr("transform", null)
-//       .text(function(d) { return d.name.replace(/-.*/, ""); })
-//       //.style("font-size", 5)
-//     .filter(function(d) { return d.x < width / 2; })//positioning left or right of node
-//       .attr("x", 6 + sankey.nodeWidth())
-//       .attr("text-anchor", "start");
-
-  // // the function for moving the nodes
-  //   function dragmove(d) {
-  //     d3.select(this).attr("transform", 
-  //         "translate(" + d.x + "," + (
-  //                 d.y = Math.max(0, Math.min(height/2 - d.dy, d3.event.y))
-  //             ) + ")");
-  //     sankey.relayout();
-  //     link.attr("d", path);
-  //   }
-
 
 var status=null;
 function nodemouseover(d){
@@ -206,6 +173,7 @@ function nodemouseover(d){
   for(i=0;i<clust.length;i++){
     if(clust[i].name==d.name){
       desc=clust[i].desc;
+      descGlobal = clust[i].desc;
     }
   }
   d3.selectAll(".link")
@@ -240,6 +208,7 @@ function nodemouseout(d){
   $("#joined").html("");
   $("#instructions").html("");
     }
+
 function linkmouseover(d){
   d3.select(this)
       .attr("stroke-opacity",.5);
@@ -267,9 +236,22 @@ d3.selectAll(".link")
 
 
 function onclick(d){
+
+  console.log(descGlobal);
+
   d3.selectAll("#goback").remove();
   d3.select("text").remove();
+  d3.select("#clustable").append("text").text("");
   d3.selectAll("#months").remove();
+
+  d3.select("svg")
+    .append("text")
+    .text(descGlobal)
+    .attr("id","desc")
+    .attr("class","span3 offset1")
+    .attr("align","center")
+    .attr("x",width/2)
+    .attr("y",10);
 
   d3.selectAll(".link")
       .transition()
